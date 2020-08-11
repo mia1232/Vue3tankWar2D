@@ -14,7 +14,7 @@ export default defineComponent({
   render(ctx) {
     return h("Container", [
       h("Sprite", { texture: startPageImg,
-        x: 115,
+        x: 10,
         y: 0,
         interactive: true,
         onClick: ctx.onClick})

@@ -28,7 +28,7 @@ export const bulletHitTestObject = (objA, objB) => {
 
 export const environmentRuleHasCollision = ({ environment, tankInfo }) => {
   const { SteelBlocks, WallsBlocks } = environment;
-  if(tankInfo.x < 0 || tankInfo.x + 60 > 60 * 16 || tankInfo.y < 0 || tankInfo.y + 60 > 60 * 16 )
+  if(tankInfo.x < 0 || tankInfo.x + 60 > 60 * 14 || tankInfo.y < 0 || tankInfo.y + 60 > 60 * 12 )
     return true;
   if (SteelBlocks) {
     return (

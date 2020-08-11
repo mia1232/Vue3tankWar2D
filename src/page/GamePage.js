@@ -26,7 +26,7 @@ import Walls from "../component/Walls";
 
 export default defineComponent({
   setup(props, { emit }) {
-
+    console.log(initTwoDimensionalArrayData);
     const { SteelBlocksArr: SteelIntialData, GrassBlocksArr:GrassInitialData, WallsBlockArr: WallsInitData, WaterBlockArr: WaterIntialData, EnemyArr: enemyTankConfig, Player: PlayerInitData  } =  parseInitEnvDataToGameWorld(initTwoDimensionalArrayData);
 
     const { enemyTanks } = useCreateEnemyTank(enemyTankConfig);
@@ -80,8 +80,6 @@ export default defineComponent({
   },
 
   render(ctx) {
-    // 创建敌方
-
     const createEnemyTanks = onEnemyAttack => {
       return ctx.enemyTanks.map(info => {
         return h(EnemyTank, {
@@ -136,11 +134,6 @@ export default defineComponent({
 
 function useFighting(enemyTanks, bullets, enemyBullets, planeInfo, emit, environment) {
   const handleTicker = () => {
-    // 主循环
-    // 敌方飞机移动
-    // y
-    // 移动我方子弹
-
     const { SteelBlocks, WallsBlocks } = environment;
     bullets.forEach(bulletInfo => {
       switch (bulletInfo.direction) {
@@ -178,8 +171,6 @@ function useFighting(enemyTanks, bullets, enemyBullets, planeInfo, emit, environ
 
     enemyTanks.forEach(enemyInfo => {
       if (hitTestObject(enemyInfo, planeInfo)) {
-        console.log("hit");
-        // 游戏结束
         emit("changePage", "EndPage");
       }
     });
@@ -292,9 +283,6 @@ function useEnvironmentInteraction(
 ) {
   let timeIntervalReturnedValue;
   const handleTicker = () => {
-    // 主循环
-    // 敌方飞机移动
-    // y
     enemyTanks.forEach(tankInfo => {
       const speed = 7.5;
       const  direction = getBestDirection(tankInfo, playerTankInfo);
