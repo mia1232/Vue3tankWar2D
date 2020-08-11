@@ -1,6 +1,5 @@
 import { h, defineComponent } from "@vue/runtime-core";
 import startPageImg from "../../assets/Battle_City.png";
-import startBtnImg from "../../assets/startBtn.png";
 
 export default defineComponent({
   setup(props, ctx) {

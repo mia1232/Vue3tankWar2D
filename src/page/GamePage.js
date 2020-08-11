@@ -31,16 +31,16 @@ export default defineComponent({
 
     const { enemyTanks } = useCreateEnemyTank(enemyTankConfig);
 
+    const WallsBlocks = useBackgrounds(WallsInitData);
     const SteelBlocks = useBackgrounds(SteelIntialData);
     const { tankInfo } = useCreateTank(PlayerInitData, environmentRuleHasCollision, {
-      SteelBlocks
+      SteelBlocks, WallsBlocks
     });
 
     const WaterBlocks = useBackgrounds(WaterIntialData);
 
     const GrassBlocks = useBackgrounds(GrassInitialData);
 
-    const WallsBlocks = useBackgrounds(WallsInitData);
 
     // 我方子弹
     const { bullets, addBullet } = useCreateBullets();
@@ -52,7 +52,7 @@ export default defineComponent({
       SteelBlocks, WallsBlocks
     });
     useEnvironmentInteraction(tankInfo, environmentRuleHasCollision, enemyTanks, {
-      SteelBlocks
+      SteelBlocks, WallsBlocks
     });
 
     const onAttack = bulletInfo => {
@@ -226,7 +226,7 @@ function useFighting(enemyTanks, bullets, enemyBullets, planeInfo, emit, environ
     enemyBullets.forEach((bulletInfo, bulletIndex) => {
       WallsBlocks.forEach((WallsBlockInfo, WallsBlocksIndex) => {
         if (bulletHitTestObject(bulletInfo, WallsBlockInfo)) {         
-          bullets.splice(bulletIndex, 1);
+          enemyBullets.splice(bulletIndex, 1);
           if( WallsBlockInfo.health === 0) {
             WallsBlocks.splice(WallsBlocksIndex, 1)
           } else {
@@ -250,8 +250,6 @@ function useFighting(enemyTanks, bullets, enemyBullets, planeInfo, emit, environ
         if (hitTestObject(bulletInfo, enemyInfo)) {
           bullets.splice(bulletIndex, 1);
           enemyTanks.splice(enemyIndex, 1);
-          // 我方子弹消失
-          // 敌方飞机消失
         }
       });
     });
@@ -379,9 +377,7 @@ function useBackgrounds(bgInitData) {
 }
 
 function useCreateTank(playerInitData, environmentRuleHasCollision, environment) {
-  // 我方飞机的逻辑
   const tankInfo = reactive(playerInitData);
-  // 键盘控制飞机的移动
   const speed = 5;
   window.addEventListener("keydown", e => {
     if (!environmentRuleHasCollision({ tankInfo, environment })) {

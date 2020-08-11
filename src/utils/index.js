@@ -27,11 +27,15 @@ export const bulletHitTestObject = (objA, objB) => {
 
 
 export const environmentRuleHasCollision = ({ environment, tankInfo }) => {
-  const { SteelBlocks } = environment;
+  const { SteelBlocks, WallsBlocks } = environment;
+  if(tankInfo.x < 0 || tankInfo.x + 60 > 60 * 16 || tankInfo.y < 0 || tankInfo.y + 60 > 60 * 16 )
+    return true;
   if (SteelBlocks) {
     return (
       SteelBlocks.filter(steelBlock => hitTestObject(steelBlock, tankInfo))
-        .length > 0
+        .length > 0 || 
+      WallsBlocks.filter(WallsBlock => hitTestObject(WallsBlock, tankInfo))
+        .length > 0 
     );
   } else {
     return false;
