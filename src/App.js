@@ -9,10 +9,7 @@ export default defineComponent({
   setup() {
     // 普通的值
     // ref 创建一个响应式对象 值类型 string  number
-    // const currentPageName = ref("StartPage");
     const currentPageName = ref("StartPage");
-    // const currentPageName = ref("EndPage");
-    // console.log(currentPageName);
     //改变 string 的话切换组件
     //一个依赖别的属性的属性
     //计算属性

@@ -1,4 +1,4 @@
-//敌方飞机
+// 引入第一类地方坦克 基础的地方坦克
 import {
   h,
   defineComponent,
@@ -19,9 +19,9 @@ export default defineComponent({
 
 
   setup(props, { emit }) {
-    const { x, y, direction } = toRefs(props);
+    const tankFireInterval = 4000; 
+    const { x, y, direction } = toRefs(props);   
     const TankImg = computed(() => {
-      console.log(direction.value)
       if (direction.value === "TOP") {
         return enemyTankImgU;
       } else if (direction.value === "LEFT") {
@@ -40,10 +40,12 @@ export default defineComponent({
 
     let timeIntervalReturnedValue;
     onMounted(() => {
-      timeIntervalReturnedValue = setInterval(enenyFire,4000);
+      //每四秒发射一颗子弹
+      timeIntervalReturnedValue = setInterval(enenyFire,tankFireInterval);
     });
   
     onUnmounted(() => {
+      //清除 定时器 释放内存
       clearInterval(timeIntervalReturnedValue);
     });
     return {

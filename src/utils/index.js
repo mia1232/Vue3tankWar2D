@@ -42,6 +42,7 @@ export const environmentRuleHasCollision = ({ environment, tankInfo }) => {
   }
 };
 
+// 这个函数的作用是 将子弹出现的位置 定位到坦克的枪管子上 使得开火的效果更加逼真
 export const firePointTransform = ({ x, y, direction }) => {
   switch (direction.value) {
     case "TOP":
