@@ -2,6 +2,8 @@
 ## 持续更新中
 
 ##### 使用 Vue3 和 Pixi 动画库 编写
+
+###### 已加入更多关卡 更多敌人类型
 ***
 npm install && npm run serve
 
