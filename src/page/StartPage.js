@@ -4,7 +4,7 @@ import startPageImg from "../../assets/Battle_City.png";
 export default defineComponent({
   setup(props, ctx) {
     const onClick = () => {
-      ctx.emit("changePage","GamePage")
+      ctx.emit("changePage","GamePagelv1")
     };
 
     return {

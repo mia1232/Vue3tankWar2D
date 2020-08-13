@@ -19,7 +19,6 @@ export default defineComponent({
     const { x, y, direction } = toRefs(props);
 
     const TankImg = computed(() => {
-      console.log(direction.value)
       if (direction.value === "TOP") {
         return TankImgU;
       } else if (direction.value === "LEFT") {

@@ -3,7 +3,8 @@ import {
   defineComponent,
   reactive,
   onMounted,
-  onUnmounted
+  onUnmounted,
+  toRefs
 } from "@vue/runtime-core";
 import Steels from "../component/Steels";
 import Tank from "../component/Tank";
@@ -19,16 +20,17 @@ import {
 } from "../utils/index";
 
 import { parseInitEnvDataToGameWorld } from "../utils/envParser";
-import { initTwoDimensionalArrayData } from "../environment-config/envConfig";
 import { getBestDirection } from "../tank-ai/tankai";
 import Water from "../component/Water";
 import Grass from "../component/Grass";
 import Walls from "../component/Walls";
 
 export default defineComponent({
+  props: ["level", "setup"],
   setup(props, { emit }) {
-    console.log(initTwoDimensionalArrayData);
-    const { SteelBlocksArr: SteelIntialData, GrassBlocksArr:GrassInitialData, WallsBlockArr: WallsInitData, WaterBlockArr: WaterIntialData, EnemyBasicTankArr: enemyTankConfig, EnemyTankType2Arr: enemyType2Config, Player: PlayerInitData  } =  parseInitEnvDataToGameWorld(initTwoDimensionalArrayData);
+    const { level, setup } = toRefs(props);
+
+    const { SteelBlocksArr: SteelIntialData, GrassBlocksArr:GrassInitialData, WallsBlockArr: WallsInitData, WaterBlockArr: WaterIntialData, EnemyBasicTankArr: enemyTankConfig, EnemyTankType2Arr: enemyType2Config, Player: PlayerInitData  } =  parseInitEnvDataToGameWorld(setup.value);
 
     const { enemyTanks } = useCreateEnemyTank(enemyTankConfig);
 
@@ -51,7 +53,7 @@ export default defineComponent({
       bullets: enemyBullets,
       addBullet: addEnemyBullet
     } = useCreateBullets();
-    useFighting(enemyTanks, enemyTanksType2, bullets, enemyBullets, tankInfo, emit, {
+    useFighting(level.value, enemyTanks, enemyTanksType2, bullets, enemyBullets, tankInfo, emit, {
       SteelBlocks, WallsBlocks
     });
     useEnvironmentInteraction(tankInfo, environmentRuleHasCollision, enemyTanks, enemyTanksType2, {
@@ -148,7 +150,7 @@ export default defineComponent({
   }
 });
 
-function useFighting(enemyTanks, enemyTanksTypes2, bullets, enemyBullets, playerTankInfo, emit, environment) {
+function useFighting(level, enemyTanks, enemyTanksTypes2, bullets, enemyBullets, playerTankInfo, emit, environment) {
   const handleTicker = () => {
     const { SteelBlocks, WallsBlocks } = environment;
     bullets.forEach(bulletInfo => {
@@ -196,6 +198,15 @@ function useFighting(enemyTanks, enemyTanksTypes2, bullets, enemyBullets, player
         emit("changePage", "EndPage");
       }
     });
+
+    
+    if(enemyTanksTypes2.length === 0 && enemyTanks.length === 0) {
+      if(level === 1) {
+        emit("changePage", "GamePagelv2");
+        emit("changeLevel", 2);
+      }
+
+    }
 
     enemyBullets.forEach(enemyInfo => {
       if (hitTestObject(enemyInfo, playerTankInfo)) {
