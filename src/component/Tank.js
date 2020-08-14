@@ -9,7 +9,7 @@ import TankImgD from "../../assets/p1tankD.gif";
 import TankImgL from "../../assets/p1tankL.gif";
 import TankImgR from "../../assets/p1tankR.gif";
 import TankImgU from "../../assets/p1tankU.gif";
-import { firePointTransform } from "../utils/index";
+import { firePointTransform, throttle } from "../utils/index";
 
 
 export default defineComponent({
@@ -30,11 +30,13 @@ export default defineComponent({
       }
     });
 
-    window.addEventListener("keydown", (e) => {
+    function tankFireHandler(e) {
       if (e.code === "Space") {
         emit("attack", firePointTransform({x, y, direction}));
       }
-    });
+    }
+
+    window.addEventListener("keydown", throttle(tankFireHandler, 500));
     return {
       x,
       y,

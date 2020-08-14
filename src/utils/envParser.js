@@ -17,7 +17,7 @@ export function parseInitEnvDataToGameWorld(initTwoDimensionalArrayData) {
                 case 1:
                     GrassBlocksArr.push({
                         x: columnIndex * BLOCKWIDTH,
-                        y:  rowIndex* BLOCKWIDTH,
+                        y: rowIndex* BLOCKWIDTH,
                         width: BLOCKWIDTH,
                         height: BLOCKWIDTH
                     })
@@ -50,8 +50,8 @@ export function parseInitEnvDataToGameWorld(initTwoDimensionalArrayData) {
                 case 5:
                     EnemyBasicTankArr.push({
                         direction: "TOP",
-                        x: rowIndex * BLOCKWIDTH,
-                        y: columnIndex * BLOCKWIDTH,
+                        x: columnIndex  * BLOCKWIDTH,
+                        y:  rowIndex * BLOCKWIDTH,
                         width: BLOCKWIDTH,
                         height: BLOCKWIDTH
                     })
@@ -59,8 +59,8 @@ export function parseInitEnvDataToGameWorld(initTwoDimensionalArrayData) {
                 case 6:
                     Player = {
                         direction: "TOP",
-                        x: rowIndex * BLOCKWIDTH,
-                        y: columnIndex * BLOCKWIDTH,
+                        x: columnIndex  * BLOCKWIDTH,
+                        y: rowIndex * BLOCKWIDTH,
                         width: BLOCKWIDTH,
                         height: BLOCKWIDTH
                     }
@@ -68,8 +68,8 @@ export function parseInitEnvDataToGameWorld(initTwoDimensionalArrayData) {
                 case 7:
                     EnemyTankType2Arr.push({
                         direction: "TOP",
-                        x: rowIndex * BLOCKWIDTH,
-                        y: columnIndex * BLOCKWIDTH,
+                        x: columnIndex * BLOCKWIDTH,
+                        y: rowIndex * BLOCKWIDTH,
                         width: BLOCKWIDTH,
                         height: BLOCKWIDTH,
                         health: 50,

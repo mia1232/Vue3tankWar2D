@@ -11,14 +11,8 @@ import { GameLevel2Setup } from "./environment-config/lv2envConfig";
 
 export default defineComponent({
   setup() {
-    // 普通的值
-    // ref 创建一个响应式对象 值类型 string  number
     const currentPageName = ref("StartPage");
-    const gameLevel = ref(1);
-    //改变 string 的话切换组件
-    //一个依赖别的属性的属性
-    //计算属性
-    // ref 响应式对象
+    const gameLevel = ref(2);
     const currentPage = computed(() => {
       if (currentPageName.value === "StartPage") {
         return StartPage;
