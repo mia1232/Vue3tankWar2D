@@ -12,7 +12,7 @@ import { GameLevel2Setup } from "./environment-config/lv2envConfig";
 export default defineComponent({
   setup() {
     const currentPageName = ref("StartPage");
-    const gameLevel = ref(2);
+    const gameLevel = ref(1);
     const currentPage = computed(() => {
       if (currentPageName.value === "StartPage") {
         return StartPage;
