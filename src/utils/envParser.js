@@ -49,11 +49,13 @@ export function parseInitEnvDataToGameWorld(initTwoDimensionalArrayData) {
                     break;  
                 case 5:
                     EnemyBasicTankArr.push({
+                        status: "ALIVE",
                         direction: "TOP",
                         x: columnIndex  * BLOCKWIDTH,
                         y:  rowIndex * BLOCKWIDTH,
                         width: BLOCKWIDTH,
-                        height: BLOCKWIDTH
+                        height: BLOCKWIDTH,
+                        health: 25,
                     })
                     break;      
                 case 6:
@@ -67,6 +69,7 @@ export function parseInitEnvDataToGameWorld(initTwoDimensionalArrayData) {
                     break;
                 case 7:
                     EnemyTankType2Arr.push({
+                        status: "ALIVE",
                         direction: "TOP",
                         x: columnIndex * BLOCKWIDTH,
                         y: rowIndex * BLOCKWIDTH,

@@ -36,7 +36,7 @@ export default defineComponent({
       }
     }
 
-    window.addEventListener("keydown", throttle(tankFireHandler, 500));
+    window.addEventListener("keydown", throttle(tankFireHandler, 300));
     return {
       x,
       y,

@@ -12,16 +12,20 @@ import enemyTankImgD from "../../assets/enemy1D.gif";
 import enemyTankImgL from "../../assets/enemy1L.gif";
 import enemyTankImgR from "../../assets/enemy1R.gif";
 import enemyTankImgU from "../../assets/enemy1U.gif";
+import Blast from "../../assets/blast7.gif";
 import { firePointTransform } from "../utils/index";
 
 export default defineComponent({
-  props: ["x", "y", "direction"],
+  props: ["x", "y", "direction", "status"],
 
 
   setup(props, { emit }) {
     const tankFireInterval = 4000; 
-    const { x, y, direction } = toRefs(props);   
+    const { x, y, direction, status } = toRefs(props);   
     const TankImg = computed(() => {
+      if(status.value === 'DEAD') {
+        return Blast;
+      }
       if (direction.value === "TOP") {
         return enemyTankImgU;
       } else if (direction.value === "LEFT") {
@@ -34,14 +38,14 @@ export default defineComponent({
     });
 
 
-    function enenyFire() {
+    function enemyFire() {
       emit("attack", firePointTransform({x, y, direction}));
     }
 
     let timeIntervalReturnedValue;
     onMounted(() => {
       //每四秒发射一颗子弹
-      timeIntervalReturnedValue = setInterval(enenyFire,tankFireInterval);
+      timeIntervalReturnedValue = setInterval(enemyFire,tankFireInterval);
     });
   
     onUnmounted(() => {

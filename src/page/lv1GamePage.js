@@ -30,22 +30,36 @@ export default defineComponent({
   setup(props, { emit }) {
     const { level, setup } = toRefs(props);
 
-    const { SteelBlocksArr: SteelIntialData, GrassBlocksArr:GrassInitialData, WallsBlockArr: WallsInitData, WaterBlockArr: WaterIntialData, EnemyBasicTankArr: enemyTankConfig, EnemyTankType2Arr: enemyType2Config, Player: PlayerInitData  } =  parseInitEnvDataToGameWorld(setup.value);
+    const {
+      SteelBlocksArr: SteelIntialData,
+      GrassBlocksArr: GrassInitialData,
+      WallsBlockArr: WallsInitData,
+      WaterBlockArr: WaterIntialData,
+      EnemyBasicTankArr: enemyTankConfig,
+      EnemyTankType2Arr: enemyType2Config,
+      Player: PlayerInitData
+    } = parseInitEnvDataToGameWorld(setup.value);
 
     const { enemyTanks } = useCreateEnemyTank(enemyTankConfig);
 
-    const { enemyTanks: enemyTanksType2 } = useCreateEnemyTank(enemyType2Config);
+    const { enemyTanks: enemyTanksType2 } = useCreateEnemyTank(
+      enemyType2Config
+    );
 
     const WallsBlocks = useBackgrounds(WallsInitData);
     const SteelBlocks = useBackgrounds(SteelIntialData);
-    const { tankInfo } = useCreateTank(PlayerInitData, environmentRuleHasCollision, {
-      SteelBlocks, WallsBlocks
-    });
+    const { tankInfo } = useCreateTank(
+      PlayerInitData,
+      environmentRuleHasCollision,
+      {
+        SteelBlocks,
+        WallsBlocks
+      }
+    );
 
     const WaterBlocks = useBackgrounds(WaterIntialData);
 
     const GrassBlocks = useBackgrounds(GrassInitialData);
-
 
     // 我方子弹
     const { bullets, addBullet } = useCreateBullets();
@@ -53,12 +67,29 @@ export default defineComponent({
       bullets: enemyBullets,
       addBullet: addEnemyBullet
     } = useCreateBullets();
-    useFighting(level.value, enemyTanks, enemyTanksType2, bullets, enemyBullets, tankInfo, emit, {
-      SteelBlocks, WallsBlocks
-    });
-    useEnvironmentInteraction(tankInfo, environmentRuleHasCollision, enemyTanks, enemyTanksType2, {
-      SteelBlocks, WallsBlocks
-    });
+    useFighting(
+      level.value,
+      enemyTanks,
+      enemyTanksType2,
+      bullets,
+      enemyBullets,
+      tankInfo,
+      emit,
+      {
+        SteelBlocks,
+        WallsBlocks
+      }
+    );
+    useEnvironmentInteraction(
+      tankInfo,
+      environmentRuleHasCollision,
+      enemyTanks,
+      enemyTanksType2,
+      {
+        SteelBlocks,
+        WallsBlocks
+      }
+    );
 
     const onAttack = bulletInfo => {
       // 本方坦克发射子弹
@@ -89,9 +120,10 @@ export default defineComponent({
     const createEnemyTanks = onEnemyAttack => {
       return ctx.enemyTanks.map(info => {
         return h(EnemyTank, {
+          status: info.status,
           x: info.x,
           y: info.y,
-          health: 50,
+          health: info.health,
           direction: info.direction,
           onAttack: onEnemyAttack
         });
@@ -101,8 +133,10 @@ export default defineComponent({
     const createEnemyTanksType2 = onEnemyAttack => {
       return ctx.enemyTanksType2.map(info => {
         return h(EnemyTank2, {
+          status: info.status,
           x: info.x,
           y: info.y,
+          health: info.health,
           direction: info.direction,
           onAttack: onEnemyAttack
         });
@@ -150,7 +184,16 @@ export default defineComponent({
   }
 });
 
-function useFighting(level, enemyTanks, enemyTanksTypes2, bullets, enemyBullets, playerTankInfo, emit, environment) {
+function useFighting(
+  level,
+  enemyTanks,
+  enemyTanksTypes2,
+  bullets,
+  enemyBullets,
+  playerTankInfo,
+  emit,
+  environment
+) {
   const handleTicker = () => {
     const { SteelBlocks, WallsBlocks } = environment;
     bullets.forEach(bulletInfo => {
@@ -199,13 +242,11 @@ function useFighting(level, enemyTanks, enemyTanksTypes2, bullets, enemyBullets,
       }
     });
 
-    
-    if(enemyTanksTypes2.length === 0 && enemyTanks.length === 0) {
-      if(level === 1) {
+    if (enemyTanksTypes2.length === 0 && enemyTanks.length === 0) {
+      if (level === 1) {
         emit("changePage", "GamePagelv2");
         emit("changeLevel", 2);
       }
-
     }
 
     enemyBullets.forEach(enemyInfo => {
@@ -234,10 +275,10 @@ function useFighting(level, enemyTanks, enemyTanksTypes2, bullets, enemyBullets,
 
     bullets.forEach((bulletInfo, bulletIndex) => {
       WallsBlocks.forEach((WallsBlockInfo, WallsBlocksIndex) => {
-        if (bulletHitTestObject(bulletInfo, WallsBlockInfo)) {         
+        if (bulletHitTestObject(bulletInfo, WallsBlockInfo)) {
           bullets.splice(bulletIndex, 1);
-          if( WallsBlockInfo.health === 0) {
-            WallsBlocks.splice(WallsBlocksIndex, 1)
+          if (WallsBlockInfo.health === 0) {
+            WallsBlocks.splice(WallsBlocksIndex, 1);
           } else {
             WallsBlockInfo.health = WallsBlockInfo.health - 50;
           }
@@ -245,20 +286,18 @@ function useFighting(level, enemyTanks, enemyTanksTypes2, bullets, enemyBullets,
       });
     });
 
-
     enemyBullets.forEach((bulletInfo, bulletIndex) => {
       WallsBlocks.forEach((WallsBlockInfo, WallsBlocksIndex) => {
-        if (bulletHitTestObject(bulletInfo, WallsBlockInfo)) {         
+        if (bulletHitTestObject(bulletInfo, WallsBlockInfo)) {
           enemyBullets.splice(bulletIndex, 1);
-          if( WallsBlockInfo.health === 0) {
-            WallsBlocks.splice(WallsBlocksIndex, 1)
+          if (WallsBlockInfo.health === 0) {
+            WallsBlocks.splice(WallsBlocksIndex, 1);
           } else {
             WallsBlockInfo.health = WallsBlockInfo.health - 25;
           }
         }
       });
     });
-
 
     enemyBullets.forEach((bulletInfo, bulletIndex) => {
       SteelBlocks.forEach((SteelBlockInfo, enemyIndex) => {
@@ -270,20 +309,36 @@ function useFighting(level, enemyTanks, enemyTanksTypes2, bullets, enemyBullets,
 
     bullets.forEach((bulletInfo, bulletIndex) => {
       enemyTanks.forEach((enemyInfo, enemyIndex) => {
-        if (hitTestObject(bulletInfo, enemyInfo)) {
+        if (
+          hitTestObject(bulletInfo, enemyInfo) &&
+          enemyInfo.status === "ALIVE"
+        ) {
           bullets.splice(bulletIndex, 1);
-          enemyTanks.splice(enemyIndex, 1);
+          if (enemyInfo.health === 0) {
+            enemyInfo.status = "DEAD";
+            setTimeout(function() {
+              enemyTanks.splice(enemyIndex, 1);
+            }, 1000);
+          } else {
+            enemyInfo.health = enemyInfo.health - 25;
+          }
         }
       });
     });
 
     bullets.forEach((bulletInfo, bulletIndex) => {
       enemyTanksTypes2.forEach((enemyInfo, enemyIndex) => {
-        if (hitTestObject(bulletInfo, enemyInfo)) {
+        if (
+          hitTestObject(bulletInfo, enemyInfo) &&
+          enemyInfo.status === "ALIVE"
+        ) {
           bullets.splice(bulletIndex, 1);
           // 能挨两炮
-          if( enemyInfo.health === 0) {
-            enemyTanksTypes2.splice(enemyIndex, 1)
+          if (enemyInfo.health === 0) {
+            enemyInfo.status = "DEAD";
+            setTimeout(function() {
+              enemyTanksTypes2.splice(enemyIndex, 1);
+            }, 1000);
           } else {
             enemyInfo.health = enemyInfo.health - 25;
           }
@@ -331,129 +386,166 @@ function useEnvironmentInteraction(
   let timeIntervalReturnedValue;
   const handleTicker = () => {
     enemyTanksType2.forEach(tankInfo => {
-      const speed = 15;
-      const  direction = getBestDirection(tankInfo, playerTankInfo);
-      switch (direction) {
-        case "TOP":
-          tankInfo.direction = "TOP";
-          tankInfo.y -= speed;
-          if (environmentRuleHasCollision({ tankInfo, environment })) {
-            tankInfo.y += speed;
-          }
-          break;
-        case "DOWN":
-          tankInfo.direction = "DOWN";
-          tankInfo.y += speed;
-          if (environmentRuleHasCollision({ tankInfo, environment })) {
+      if (tankInfo.status === "ALIVE") {
+        const speed = 15;
+        const direction = getBestDirection(tankInfo, playerTankInfo);
+        switch (direction) {
+          case "TOP":
+            tankInfo.direction = "TOP";
             tankInfo.y -= speed;
-          }
-          break;
-        case "LEFT":
-          tankInfo.direction = "LEFT";
-          tankInfo.x -= speed;
-          if (environmentRuleHasCollision({ tankInfo, environment })) {
-            tankInfo.x += speed;
-          }
-          break;
-        case "RIGHT":
-          tankInfo.direction = "RIGHT";
-          tankInfo.x += speed;
-          if (environmentRuleHasCollision({ tankInfo, environment })) {
-            tankInfo.x -= speed;
-          }
-          break;
-      }
-      const randonNumber = Math.random();
-      if (!environmentRuleHasCollision({ tankInfo, environment })) {
-        if (randonNumber >= 0 && randonNumber <= 0.25 && tankInfo.direction !== "LEFT"  && tankInfo.direction !== "RIGHT") {
-          tankInfo.direction = "TOP";
-          tankInfo.y -= speed;
-          if (environmentRuleHasCollision({ tankInfo, environment })) {
+            if (environmentRuleHasCollision({ tankInfo, environment })) {
+              tankInfo.y += speed;
+            }
+            break;
+          case "DOWN":
+            tankInfo.direction = "DOWN";
             tankInfo.y += speed;
-          }
-        } else if (randonNumber >= 0.25 && randonNumber <= 0.5 && tankInfo.direction !== "LEFT"  && tankInfo.direction !== "RIGHT") {
-          tankInfo.direction = "DOWN";
-          tankInfo.y += speed;
-          if (environmentRuleHasCollision({ tankInfo, environment })) {
-            tankInfo.y -= speed;
-          }
-        } else if (randonNumber >= 0.5 && randonNumber <= 0.75 && tankInfo.direction !== "TOP"  && tankInfo.direction !== "DOWN") {
-          tankInfo.direction = "LEFT";
-          tankInfo.x -= speed;
-          if (environmentRuleHasCollision({ tankInfo, environment })) {
-            tankInfo.x += speed;
-          }
-        } else if(tankInfo.direction !== "TOP"  && tankInfo.direction !== "DOWN"){
-          tankInfo.direction = "RIGHT";
-          tankInfo.x += speed;
-          if (environmentRuleHasCollision({ tankInfo, environment })) {
+            if (environmentRuleHasCollision({ tankInfo, environment })) {
+              tankInfo.y -= speed;
+            }
+            break;
+          case "LEFT":
+            tankInfo.direction = "LEFT";
             tankInfo.x -= speed;
+            if (environmentRuleHasCollision({ tankInfo, environment })) {
+              tankInfo.x += speed;
+            }
+            break;
+          case "RIGHT":
+            tankInfo.direction = "RIGHT";
+            tankInfo.x += speed;
+            if (environmentRuleHasCollision({ tankInfo, environment })) {
+              tankInfo.x -= speed;
+            }
+            break;
+        }
+        const randonNumber = Math.random();
+        if (!environmentRuleHasCollision({ tankInfo, environment })) {
+          if (
+            randonNumber >= 0 &&
+            randonNumber <= 0.25 &&
+            tankInfo.direction !== "LEFT" &&
+            tankInfo.direction !== "RIGHT"
+          ) {
+            tankInfo.direction = "TOP";
+            tankInfo.y -= speed;
+            if (environmentRuleHasCollision({ tankInfo, environment })) {
+              tankInfo.y += speed;
+            }
+          } else if (
+            randonNumber >= 0.25 &&
+            randonNumber <= 0.5 &&
+            tankInfo.direction !== "LEFT" &&
+            tankInfo.direction !== "RIGHT"
+          ) {
+            tankInfo.direction = "DOWN";
+            tankInfo.y += speed;
+            if (environmentRuleHasCollision({ tankInfo, environment })) {
+              tankInfo.y -= speed;
+            }
+          } else if (
+            randonNumber >= 0.5 &&
+            randonNumber <= 0.75 &&
+            tankInfo.direction !== "TOP" &&
+            tankInfo.direction !== "DOWN"
+          ) {
+            tankInfo.direction = "LEFT";
+            tankInfo.x -= speed;
+            if (environmentRuleHasCollision({ tankInfo, environment })) {
+              tankInfo.x += speed;
+            }
+          } else if (
+            tankInfo.direction !== "TOP" &&
+            tankInfo.direction !== "DOWN"
+          ) {
+            tankInfo.direction = "RIGHT";
+            tankInfo.x += speed;
+            if (environmentRuleHasCollision({ tankInfo, environment })) {
+              tankInfo.x -= speed;
+            }
           }
         }
       }
     });
 
-
-
-
     enemyTanks.forEach(tankInfo => {
-      const speed = 7.5;
-      const  direction = getBestDirection(tankInfo, playerTankInfo);
-      switch (direction) {
-        case "TOP":
-          tankInfo.direction = "TOP";
-          tankInfo.y -= speed;
-          if (environmentRuleHasCollision({ tankInfo, environment })) {
-            tankInfo.y += speed;
-          }
-          break;
-        case "DOWN":
-          tankInfo.direction = "DOWN";
-          tankInfo.y += speed;
-          if (environmentRuleHasCollision({ tankInfo, environment })) {
+      if (tankInfo.status === "ALIVE") {
+        const speed = 7.5;
+        const direction = getBestDirection(tankInfo, playerTankInfo);
+        switch (direction) {
+          case "TOP":
+            tankInfo.direction = "TOP";
             tankInfo.y -= speed;
-          }
-          break;
-        case "LEFT":
-          tankInfo.direction = "LEFT";
-          tankInfo.x -= speed;
-          if (environmentRuleHasCollision({ tankInfo, environment })) {
-            tankInfo.x += speed;
-          }
-          break;
-        case "RIGHT":
-          tankInfo.direction = "RIGHT";
-          tankInfo.x += speed;
-          if (environmentRuleHasCollision({ tankInfo, environment })) {
-            tankInfo.x -= speed;
-          }
-          break;
-      }
-      const randonNumber = Math.random();
-      if (!environmentRuleHasCollision({ tankInfo, environment })) {
-        if (randonNumber >= 0 && randonNumber <= 0.25 && tankInfo.direction !== "LEFT"  && tankInfo.direction !== "RIGHT") {
-          tankInfo.direction = "TOP";
-          tankInfo.y -= speed;
-          if (environmentRuleHasCollision({ tankInfo, environment })) {
+            if (environmentRuleHasCollision({ tankInfo, environment })) {
+              tankInfo.y += speed;
+            }
+            break;
+          case "DOWN":
+            tankInfo.direction = "DOWN";
             tankInfo.y += speed;
-          }
-        } else if (randonNumber >= 0.25 && randonNumber <= 0.5 && tankInfo.direction !== "LEFT"  && tankInfo.direction !== "RIGHT") {
-          tankInfo.direction = "DOWN";
-          tankInfo.y += speed;
-          if (environmentRuleHasCollision({ tankInfo, environment })) {
-            tankInfo.y -= speed;
-          }
-        } else if (randonNumber >= 0.5 && randonNumber <= 0.75 && tankInfo.direction !== "TOP"  && tankInfo.direction !== "DOWN") {
-          tankInfo.direction = "LEFT";
-          tankInfo.x -= speed;
-          if (environmentRuleHasCollision({ tankInfo, environment })) {
-            tankInfo.x += speed;
-          }
-        } else if(tankInfo.direction !== "TOP"  && tankInfo.direction !== "DOWN"){
-          tankInfo.direction = "RIGHT";
-          tankInfo.x += speed;
-          if (environmentRuleHasCollision({ tankInfo, environment })) {
+            if (environmentRuleHasCollision({ tankInfo, environment })) {
+              tankInfo.y -= speed;
+            }
+            break;
+          case "LEFT":
+            tankInfo.direction = "LEFT";
             tankInfo.x -= speed;
+            if (environmentRuleHasCollision({ tankInfo, environment })) {
+              tankInfo.x += speed;
+            }
+            break;
+          case "RIGHT":
+            tankInfo.direction = "RIGHT";
+            tankInfo.x += speed;
+            if (environmentRuleHasCollision({ tankInfo, environment })) {
+              tankInfo.x -= speed;
+            }
+            break;
+        }
+        const randonNumber = Math.random();
+        if (!environmentRuleHasCollision({ tankInfo, environment })) {
+          if (
+            randonNumber >= 0 &&
+            randonNumber <= 0.25 &&
+            tankInfo.direction !== "LEFT" &&
+            tankInfo.direction !== "RIGHT"
+          ) {
+            tankInfo.direction = "TOP";
+            tankInfo.y -= speed;
+            if (environmentRuleHasCollision({ tankInfo, environment })) {
+              tankInfo.y += speed;
+            }
+          } else if (
+            randonNumber >= 0.25 &&
+            randonNumber <= 0.5 &&
+            tankInfo.direction !== "LEFT" &&
+            tankInfo.direction !== "RIGHT"
+          ) {
+            tankInfo.direction = "DOWN";
+            tankInfo.y += speed;
+            if (environmentRuleHasCollision({ tankInfo, environment })) {
+              tankInfo.y -= speed;
+            }
+          } else if (
+            randonNumber >= 0.5 &&
+            randonNumber <= 0.75 &&
+            tankInfo.direction !== "TOP" &&
+            tankInfo.direction !== "DOWN"
+          ) {
+            tankInfo.direction = "LEFT";
+            tankInfo.x -= speed;
+            if (environmentRuleHasCollision({ tankInfo, environment })) {
+              tankInfo.x += speed;
+            }
+          } else if (
+            tankInfo.direction !== "TOP" &&
+            tankInfo.direction !== "DOWN"
+          ) {
+            tankInfo.direction = "RIGHT";
+            tankInfo.x += speed;
+            if (environmentRuleHasCollision({ tankInfo, environment })) {
+              tankInfo.x -= speed;
+            }
           }
         }
       }
@@ -477,7 +569,11 @@ function useBackgrounds(bgInitData) {
   return backgroundBlocks;
 }
 
-function useCreateTank(playerInitData, environmentRuleHasCollision, environment) {
+function useCreateTank(
+  playerInitData,
+  environmentRuleHasCollision,
+  environment
+) {
   const tankInfo = reactive(playerInitData);
   const speed = 5;
   window.addEventListener("keydown", e => {
@@ -516,4 +612,3 @@ function useCreateTank(playerInitData, environmentRuleHasCollision, environment)
   });
   return { tankInfo };
 }
-
