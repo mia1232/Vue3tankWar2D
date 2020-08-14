@@ -14,9 +14,6 @@ export const hitTestObject = (objA, objB) => {
 
 
 export const bulletHitTestObject = (objA, objB) => {
-  // 找出所有没有碰撞的结果
-  // 取反
-  // 碰撞上的结果
   return (
     objA.x + objA.width >= objB.x &&
     objB.x + objB.width >= objA.x &&
@@ -42,7 +39,7 @@ export const environmentRuleHasCollision = ({ environment, tankInfo }) => {
   }
 };
 
-// 这个函数的作用是 将子弹出现的位置 定位到坦克的枪管子上 使得开火的效果更加逼真
+// 将子弹出现的位置 定位到坦克的枪管子上 使得开火的效果更加逼真
 export const firePointTransform = ({ x, y, direction }) => {
   switch (direction.value) {
     case "TOP":

@@ -4,12 +4,12 @@ import endPageImg from "../../assets/over.gif";
 export default defineComponent({
   setup(props, ctx) {
     const onClick = () => {
-      ctx.emit("changePage", "GamePagelv1");
+      ctx.emit("changePage", "GamePage");
     };
 
     const restartGameListener = e => {
       if (e.code === "Enter" || e.code === "Space")
-        ctx.emit("changePage", "GamePagelv1");
+        ctx.emit("changePage", "GamePage");
     };
 
     onMounted(() => {

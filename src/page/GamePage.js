@@ -21,7 +21,6 @@ import {
 
 import { parseInitEnvDataToGameWorld } from "../utils/envParser";
 import { getBestDirection } from "../tank-ai/tankai";
-import { GameLevel2Setup } from "../environment-config/lv2envConfig";
 import Water from "../component/Water";
 import Grass from "../component/Grass";
 import Walls from "../component/Walls";
@@ -29,7 +28,7 @@ import Walls from "../component/Walls";
 export default defineComponent({
   props: ["level", "setup"],
   setup(props, { emit }) {
-    const { level } = toRefs(props);
+    const { level, setup } = toRefs(props);
 
     const {
       SteelBlocksArr: SteelIntialData,
@@ -39,7 +38,7 @@ export default defineComponent({
       EnemyBasicTankArr: enemyTankConfig,
       EnemyTankType2Arr: enemyType2Config,
       Player: PlayerInitData
-    } = parseInitEnvDataToGameWorld(GameLevel2Setup);
+    } = parseInitEnvDataToGameWorld(setup.value);
 
     const { enemyTanks } = useCreateEnemyTank(enemyTankConfig);
 
@@ -244,7 +243,13 @@ function useFighting(
     });
 
     if (enemyTanksTypes2.length === 0 && enemyTanks.length === 0) {
-      emit("changePage", "EndPage");
+      if (level === 1) {
+        emit("changePage", "CoverPage");
+        emit("changeLevel", 2);
+      } else if (level === 2) {
+        emit("changePage", "StartPage");
+        emit("changeLevel", 1);
+      }
     }
 
     enemyBullets.forEach(enemyInfo => {

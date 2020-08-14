@@ -1,5 +1,5 @@
 import { h, defineComponent } from "@vue/runtime-core";
-import startPageImg from "../../assets/Battle_City.png";
+import coverImg from "../../assets/cover.gif";
 
 export default defineComponent({
   setup(props, ctx) {
@@ -13,7 +13,7 @@ export default defineComponent({
   },
   render(ctx) {
     return h("Container", [
-      h("Sprite", { texture: startPageImg,
+      h("Sprite", { texture: coverImg,
         x: 10,
         y: 0,
         interactive: true,

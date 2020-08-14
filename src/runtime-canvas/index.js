@@ -12,7 +12,6 @@ const renderer = createRenderer({
         element = new Sprite();
         break;
     }
-
     return element;
   },
 
@@ -26,9 +25,6 @@ const renderer = createRenderer({
   },
 
   patchProp(el, key, prevValue, nextValue) {
-    // pixi
-    // el.x = value
-    // el.y = value
     switch (key) {
       case "texture":
         el.texture = Texture.from(nextValue);

@@ -2,9 +2,9 @@
 
 import { defineComponent, h, computed, ref } from "@vue/runtime-core";
 import StartPage from "./page/StartPage";
-import Lv1GamePage from "./page/lv1GamePage";
-import Lv2GamePage from "./page/lv2GamePage";
+import GamePage from "./page/GamePage";
 import EndPage from "./page/EndPage";
+import Coverpage from "./page/levelProgressionPage";
 import { GameLevel1Setup } from "./environment-config/envConfig";
 import { GameLevel2Setup } from "./environment-config/lv2envConfig";
 
@@ -16,14 +16,13 @@ export default defineComponent({
     const currentPage = computed(() => {
       if (currentPageName.value === "StartPage") {
         return StartPage;
-      } else if (currentPageName.value === "GamePagelv1") {
-        return Lv1GamePage;
+      } else if (currentPageName.value === "GamePage") {
+        return GamePage;
       } else if (currentPageName.value === "EndPage") {
         return EndPage;
-      } else if (currentPageName.value === "GamePagelv2") {
-        return Lv2GamePage;
+      } else if (currentPageName.value === "CoverPage") {
+        return Coverpage;
       }
-
     });
 
     const currentGameSetup = computed(() => {
@@ -33,7 +32,6 @@ export default defineComponent({
         return GameLevel2Setup;
       }
     });
-
 
     return {
       currentPage,
@@ -50,7 +48,10 @@ export default defineComponent({
         level: ctx.gameLevel,
         onChangePage(page) {
           ctx.currentPageName = page;
-        }
+        },
+        onChangeLevel(level) {
+          ctx.gameLevel = level;
+        },
       }),
     ]);
   },
