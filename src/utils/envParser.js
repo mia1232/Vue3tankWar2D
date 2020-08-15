@@ -60,6 +60,7 @@ export function parseInitEnvDataToGameWorld(initTwoDimensionalArrayData) {
                     break;      
                 case 6:
                     Player = {
+                        status: "ALIVE",
                         direction: "TOP",
                         x: columnIndex  * BLOCKWIDTH,
                         y: rowIndex * BLOCKWIDTH,

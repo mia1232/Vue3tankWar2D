@@ -170,7 +170,8 @@ export default defineComponent({
         x: ctx.tankInfo.x,
         y: ctx.tankInfo.y,
         direction: ctx.tankInfo.direction,
-        onAttack: ctx.onAttack
+        onAttack: ctx.onAttack,
+        status: ctx.tankInfo.status
       }),
       ...createEnemyTanks(ctx.onEnemyAttack),
       ...createEnemyTanksType2(ctx.onEnemyAttack),
@@ -232,13 +233,19 @@ function useFighting(
 
     enemyTanks.forEach(enemyInfo => {
       if (hitTestObject(enemyInfo, playerTankInfo)) {
-        emit("changePage", "EndPage");
+        playerTankInfo.status = "DEAD"
+        setTimeout(function() {
+          emit("changePage", "EndPage");
+        }, 1000);
       }
     });
 
     enemyTanksTypes2.forEach(enemyInfo => {
       if (hitTestObject(enemyInfo, playerTankInfo)) {
-        emit("changePage", "EndPage");
+        playerTankInfo.status = "DEAD"
+        setTimeout(function() {
+          emit("changePage", "EndPage");
+        }, 1000);
       }
     });
 
@@ -252,10 +259,14 @@ function useFighting(
       }
     }
 
-    enemyBullets.forEach(enemyInfo => {
+    enemyBullets.forEach((enemyInfo, bulletIndex) => {
       if (hitTestObject(enemyInfo, playerTankInfo)) {
+        playerTankInfo.status = "DEAD"
+        enemyBullets.splice(bulletIndex, 1);
         // 游戏结束
-        emit("changePage", "EndPage");
+        setTimeout(function() {
+          emit("changePage", "EndPage");
+        }, 1000);
       }
     });
 
