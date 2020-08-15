@@ -5,8 +5,7 @@ import StartPage from "./page/StartPage";
 import GamePage from "./page/GamePage";
 import EndPage from "./page/EndPage";
 import Coverpage from "./page/levelProgressionPage";
-import { GameLevel1Setup } from "./environment-config/envConfig";
-import { GameLevel2Setup } from "./environment-config/lv2envConfig";
+import { GameLevel1Setup, GameLevel2Setup } from "./environment-config/envConfig";
 
 
 export default defineComponent({

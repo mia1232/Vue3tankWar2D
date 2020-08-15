@@ -1,4 +1,4 @@
-// 引入第一类地方坦克 基础的地方坦克
+// 引入第一类敌方坦克 基础的敌方坦克
 import {
   h,
   defineComponent,
@@ -24,6 +24,7 @@ export default defineComponent({
     const { x, y, direction, status } = toRefs(props);   
     const TankImg = computed(() => {
       if(status.value === 'DEAD') {
+        // 坦克死亡 展示 爆炸图像
         return Blast;
       }
       if (direction.value === "TOP") {

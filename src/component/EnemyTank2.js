@@ -1,4 +1,4 @@
-// 引入第二类地方坦克 行动速度更快 开火频率更短
+// 引入第二类敌方坦克 行动速度更快 开火频率更短
 
 import {
     h,
@@ -7,7 +7,6 @@ import {
     computed,
     onMounted,
     onUnmounted
-  
   } from "@vue/runtime-core";
   import enemyTankImgD from "../../assets/enemy2D.gif";
   import enemyTankImgL from "../../assets/enemy2L.gif";
@@ -35,9 +34,7 @@ import {
           return enemyTankImgR;
         } else if (direction.value === "DOWN") {
           return enemyTankImgD;
-        } else if (direction.value === "BLAST") {
-          return Blast;
-        }
+        } 
       });
   
   
