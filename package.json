@@ -12,13 +12,14 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "file-loader": "^6.0.0",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
     "@vue/runtime-core": "^3.0.0-rc.5",
-    "file-loader": "^6.0.0",
+    "howler": "^2.2.0",
     "pixi.js": "^5.3.2"
   }
 }

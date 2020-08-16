@@ -591,7 +591,7 @@ function useCreateTank(
   const tankInfo = reactive(playerInitData);
   const speed = 5;
   window.addEventListener("keydown", e => {
-    if (!environmentRuleHasCollision({ tankInfo, environment })) {
+    if (tankInfo.status === "ALIVE" && !environmentRuleHasCollision({ tankInfo, environment })) {
       switch (e.code) {
         case "ArrowUp":
           tankInfo.direction = "TOP";

@@ -12,6 +12,13 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.m4a$/,
+        loader: 'file-loader',
+        // query: {
+        //   name: 'static/media/[name].[hash:8].[ext]'
+        // }
+      },
+      {
         test: /\.(png|jpe?g|gif)$/i,
         use: [
           {
