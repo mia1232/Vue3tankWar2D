@@ -11,5 +11,3 @@ npm install && npm run serve
 
 ![Image text](https://raw.githubusercontent.com/mia1232/Vue3tankWar2D/master/assets/WechatIMG990.jpeg)   
 
-![Image text](https://raw.githubusercontent.com/mia1232/-tankWar2D/master/assets/jietu.jpeg)   
-
