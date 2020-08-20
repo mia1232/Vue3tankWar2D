@@ -291,7 +291,7 @@ function useFighting(
       WallsBlocks.forEach((WallsBlockInfo, WallsBlocksIndex) => {
         if (bulletHitTestObject(bulletInfo, WallsBlockInfo)) {
           bullets.splice(bulletIndex, 1);
-          if (WallsBlockInfo.health === 0) {
+          if (WallsBlockInfo.health <= 0) {
             WallsBlocks.splice(WallsBlocksIndex, 1);
           } else {
             WallsBlockInfo.health = WallsBlockInfo.health - 50;
@@ -568,16 +568,15 @@ function useEnvironmentInteraction(
 
   onMounted(() => {
     timeIntervalReturnedValue = setInterval(handleTicker, 1000);
-    // game.ticker.add(handleTicker);
   });
 
   onUnmounted(() => {
     clearInterval(timeIntervalReturnedValue);
-    // game.ticker.remove(handleTicker);
   });
 }
 
 function useBackgrounds(bgInitData) {
+
   const backgroundBlocks = reactive(bgInitData);
 
   return backgroundBlocks;

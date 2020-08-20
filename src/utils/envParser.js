@@ -25,7 +25,7 @@ export function parseInitEnvDataToGameWorld(initTwoDimensionalArrayData) {
                 case 2:
                     SteelBlocksArr.push({
                         x: columnIndex * BLOCKWIDTH,
-                        y:  rowIndex* BLOCKWIDTH,
+                        y: rowIndex * BLOCKWIDTH,
                         width: BLOCKWIDTH,
                         height: BLOCKWIDTH
                     })
@@ -33,7 +33,7 @@ export function parseInitEnvDataToGameWorld(initTwoDimensionalArrayData) {
                 case 3:
                     WallsBlockArr.push({
                         x: columnIndex * BLOCKWIDTH,
-                        y:  rowIndex* BLOCKWIDTH,
+                        y: rowIndex * BLOCKWIDTH,
                         width: BLOCKWIDTH,
                         height: BLOCKWIDTH,
                         health: 50
@@ -42,7 +42,7 @@ export function parseInitEnvDataToGameWorld(initTwoDimensionalArrayData) {
                 case 4:
                     WaterBlockArr.push({
                         x: columnIndex * BLOCKWIDTH,
-                        y:  rowIndex* BLOCKWIDTH,
+                        y: rowIndex * BLOCKWIDTH,
                         width: BLOCKWIDTH,
                         height: BLOCKWIDTH
                     })
@@ -51,8 +51,8 @@ export function parseInitEnvDataToGameWorld(initTwoDimensionalArrayData) {
                     EnemyBasicTankArr.push({
                         status: "ALIVE",
                         direction: "TOP",
-                        x: columnIndex  * BLOCKWIDTH,
-                        y:  rowIndex * BLOCKWIDTH,
+                        x: columnIndex * BLOCKWIDTH,
+                        y: rowIndex * BLOCKWIDTH,
                         width: BLOCKWIDTH,
                         height: BLOCKWIDTH,
                         health: 25,
@@ -62,7 +62,7 @@ export function parseInitEnvDataToGameWorld(initTwoDimensionalArrayData) {
                     Player = {
                         status: "ALIVE",
                         direction: "TOP",
-                        x: columnIndex  * BLOCKWIDTH,
+                        x: columnIndex * BLOCKWIDTH,
                         y: rowIndex * BLOCKWIDTH,
                         width: BLOCKWIDTH,
                         height: BLOCKWIDTH

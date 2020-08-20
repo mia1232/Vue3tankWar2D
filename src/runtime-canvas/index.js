@@ -1,6 +1,6 @@
 import { createRenderer } from "@vue/runtime-core";
 
-import { Graphics, Text, Container, Sprite, Texture } from "pixi.js";
+import { Text, Container, Sprite, Texture } from "pixi.js";
 const renderer = createRenderer({
   createElement(type) {
     let element;

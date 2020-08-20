@@ -1,6 +1,4 @@
 import {Howl, Howler} from 'howler';
-import audioPath from './intro.m4a';
-let audio;
 
 export class backgroundAudio {
    constructor(audioPath) {
@@ -18,18 +16,3 @@ export class backgroundAudio {
       this.audio.stop();
    }
 }
-
- export function introAudioStart() {
-   audio = new Howl({
-      src: [audioPath],
-      autoplay: true,
-      loop: true,
-      volume: 1.0,
-    });
-    audio.play();
- }
-
-
- export function introAudioEnd() {
-    audio.stop();
- }
