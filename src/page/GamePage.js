@@ -13,13 +13,14 @@ import EnemyTank2 from "../component/EnemyTank2";
 import Bullet from "../component/Bullet";
 import EnemyBullet from "../component/EnemyBullet";
 import InvunerableBuff from "../component/InvulnerableBuff";
+import { backgroundAudio } from "../gameaudio/audioUtil";
 import { game } from "../Game";
 import {
   hitTestObject,
   bulletHitTestObject,
   environmentRuleHasCollision
 } from "../utils/index";
-
+import audioPath from '../gameaudio/battlemusickurenai.m4a';
 import { parseInitEnvDataToGameWorld } from "../utils/envParser";
 import { getBestDirection } from "../tank-ai/tankai";
 import Water from "../component/Water";
@@ -29,6 +30,8 @@ import Walls from "../component/Walls";
 export default defineComponent({
   props: ["level", "setup"],
   setup(props, { emit }) {
+    const bgMusic = new backgroundAudio(audioPath);
+    bgMusic.play();
     const { level, setup } = toRefs(props);
 
     const {
@@ -73,6 +76,7 @@ export default defineComponent({
       addBullet: addEnemyBullet
     } = useCreateBullets();
     useFighting(
+      bgMusic,
       level.value,
       enemyTanks,
       enemyTanksType2,
@@ -201,6 +205,7 @@ export default defineComponent({
 });
 
 function useFighting(
+  bgMusic,
   level,
   enemyTanks,
   enemyTanksTypes2,
@@ -250,6 +255,7 @@ function useFighting(
       if (hitTestObject(enemyInfo, playerTankInfo)) {
         playerTankInfo.status = "DEAD"
         setTimeout(function() {
+          bgMusic.stop();
           emit("changePage", "EndPage");
         }, 1000);
       }
@@ -259,6 +265,7 @@ function useFighting(
       if (hitTestObject(enemyInfo, playerTankInfo)) {
         playerTankInfo.status = "DEAD"
         setTimeout(function() {
+          bgMusic.stop()
           emit("changePage", "EndPage");
         }, 1000);
       }
@@ -266,9 +273,11 @@ function useFighting(
 
     if (enemyTanksTypes2.length === 0 && enemyTanks.length === 0) {
       if (level === 1) {
+        bgMusic.stop()
         emit("changePage", "CoverPage");
         emit("changeLevel", 2);
       } else if (level === 2) {
+        bgMusic.stop()
         emit("changePage", "StartPage");
         emit("changeLevel", 1);
       }
@@ -280,6 +289,7 @@ function useFighting(
         enemyBullets.splice(bulletIndex, 1);
         // 游戏结束
         setTimeout(function() {
+          bgMusic.stop();
           emit("changePage", "EndPage");
         }, 1000);
       }
