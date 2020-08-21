@@ -5,7 +5,7 @@
 
 ###### 已加入更多关卡 更多敌人类型
 
-<span style="color:red;">Word up</span>
+#### 已加入主页面超燃战斗bgm
 ***
 npm install && npm run serve
 
