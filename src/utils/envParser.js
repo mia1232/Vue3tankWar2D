@@ -10,6 +10,7 @@ export function parseInitEnvDataToGameWorld(initTwoDimensionalArrayData) {
     const WaterBlockArr = [];
     const EnemyBasicTankArr = [];
     const EnemyTankType2Arr = [];
+    const InvunerableBuffsArr = [];
     let Player = {};
     for(let rowIndex = 0; rowIndex < 12; rowIndex++) {
         for(let columnIndex = 0; columnIndex < 14; columnIndex++) {
@@ -79,13 +80,28 @@ export function parseInitEnvDataToGameWorld(initTwoDimensionalArrayData) {
                         health: 50,
                     })
                     break;
+                case 8:
+                    InvunerableBuffsArr.push({
+                        x: columnIndex * BLOCKWIDTH,
+                        y: rowIndex * BLOCKWIDTH,
+                        width: BLOCKWIDTH,
+                        height: BLOCKWIDTH
+                    })
+                    break;
                 default:
                 
             }
         }   
     }
     return {
-        SteelBlocksArr, GrassBlocksArr, WallsBlockArr, WaterBlockArr, EnemyBasicTankArr, Player, EnemyTankType2Arr
+        InvunerableBuffsArr,
+        SteelBlocksArr, 
+        GrassBlocksArr, 
+        WallsBlockArr, 
+        WaterBlockArr, 
+        EnemyBasicTankArr, 
+        Player, 
+        EnemyTankType2Arr
     }
 }
 

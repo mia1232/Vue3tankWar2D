@@ -12,6 +12,7 @@ import EnemyTank from "../component/EnemyTank";
 import EnemyTank2 from "../component/EnemyTank2";
 import Bullet from "../component/Bullet";
 import EnemyBullet from "../component/EnemyBullet";
+import InvunerableBuff from "../component/InvulnerableBuff";
 import { game } from "../Game";
 import {
   hitTestObject,
@@ -33,6 +34,7 @@ export default defineComponent({
     const {
       SteelBlocksArr: SteelIntialData,
       GrassBlocksArr: GrassInitialData,
+      InvunerableBuffsArr: InvunerableBuffConfigData,
       WallsBlockArr: WallsInitData,
       WaterBlockArr: WaterIntialData,
       EnemyBasicTankArr: enemyTankConfig,
@@ -60,6 +62,9 @@ export default defineComponent({
     const WaterBlocks = useBackgrounds(WaterIntialData);
 
     const GrassBlocks = useBackgrounds(GrassInitialData);
+
+
+    const InvulnerableBuffs = useInvunerableBuff(InvunerableBuffConfigData);
 
     // 我方子弹
     const { bullets, addBullet } = useCreateBullets();
@@ -112,7 +117,8 @@ export default defineComponent({
       SteelBlocks,
       WaterBlocks,
       GrassBlocks,
-      WallsBlocks
+      WallsBlocks,
+      InvulnerableBuffs
     };
   },
 
@@ -165,6 +171,14 @@ export default defineComponent({
       });
     };
 
+
+    const createInvunerableBuffs = InvunerableBuffs => {
+      return InvunerableBuffs.map(info => {
+        return h(InvunerableBuff, { x: info.x, y: info.y });
+      });
+    };
+
+
     return h("Container", [
       h(Tank, {
         x: ctx.tankInfo.x,
@@ -176,6 +190,7 @@ export default defineComponent({
       ...createEnemyTanks(ctx.onEnemyAttack),
       ...createEnemyTanksType2(ctx.onEnemyAttack),
       ...createBullets(),
+      ...createInvunerableBuffs(ctx.InvulnerableBuffs),
       ...createEnemyBullets(),
       ...createBackgroundBlocks(ctx.SteelBlocks, Steels),
       ...createBackgroundBlocks(ctx.WaterBlocks, Water),
@@ -574,6 +589,15 @@ function useEnvironmentInteraction(
     clearInterval(timeIntervalReturnedValue);
   });
 }
+
+
+function useInvunerableBuff(buffInitData) {
+
+  const InvulnerableBuffs = reactive(buffInitData);
+
+  return InvulnerableBuffs;
+}
+
 
 function useBackgrounds(bgInitData) {
 

@@ -1,5 +1,6 @@
 
 // 1 represents Grass 2 represents SteelBlock 3 represents WallsBlock 4 Represents Water 5 represents enemy
+// 8 represents invincible buff 
 
 
 export const GameLevel2Setup = [[
@@ -19,7 +20,7 @@ export const GameLevel2Setup = [[
   ],[
       0,4,4,1,4,4,4,4,0,1,3,0,4,0  
   ],[
-      3,0,0,3,0,0,4,0,1,1,4,0,4,4
+      3,0,0,3,0,0,4,8,1,1,4,0,4,4
   ],[
       4,4,0,4,4,0,4,3,4,4,4,0,0,1
   ],[ 
@@ -35,7 +36,7 @@ export const GameLevel1Setup = [[
 ],[
     2,2,5,0,2,0,0,2,2,0,0,0,0,0,
 ],[
-    0,2,5,0,2,0,0,0,2,0,2,2,1,1
+    0,2,5,8,2,0,0,0,2,0,2,2,1,1
 ],[
     0,2,0,0,2,2,2,7,1,0,3,3,3,0
 ],[

@@ -40,7 +40,9 @@ const renderer = createRenderer({
   insert(el, parent) {
     parent.addChild(el);
   },
-
+  createComment() {},
+  parentNode() {},
+  nextSibling() {},
   remove(el) {
     const parent = el.parent;
     if (parent) {
