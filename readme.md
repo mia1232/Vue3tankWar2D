@@ -5,7 +5,7 @@
 
 ###### 已加入更多关卡 更多敌人类型
 
-$\color{#FF0000}{### 已加入主页面超燃战斗bgm} 
+<font face="黑体" color=red size=7>已加入主页面超燃战斗bgm</font>
 ***
 npm install && npm run serve
 
