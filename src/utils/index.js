@@ -73,11 +73,10 @@ export const firePointTransform = ({ x, y, direction }) => {
 export function throttle(fn, delay) {
   let wait = false;
   return function() {
-    let that = this, args = arguments
     if(!wait) {
       wait = true;
-      setTimeout(function(){
-        fn.apply(that, args);
+      setTimeout(() => {
+        fn(...arguments);
         wait = false;
       }, delay);
     }
