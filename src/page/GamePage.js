@@ -1,11 +1,12 @@
 import {
   h,
   defineComponent,
-  reactive,
-  onMounted,
-  onUnmounted,
   toRefs
 } from "@vue/runtime-core";
+
+import { useFighting } from "../state/FightMechanismState"; 
+import { useEnvironmentInteraction, useBackgrounds } from "../state/EnvState";
+import { useCreateTank, useCreateEnemyTank, useCreateBullets, useInvunerableBuff }from "../state/GameState";
 import Steels from "../component/Steels";
 import Tank from "../component/Tank";
 import EnemyTank from "../component/EnemyTank";
@@ -14,15 +15,11 @@ import Bullet from "../component/Bullet";
 import EnemyBullet from "../component/EnemyBullet";
 import InvunerableBuff from "../component/InvulnerableBuff";
 import { backgroundAudio } from "../gameaudio/audioUtil";
-import { game } from "../Game";
 import {
-  hitTestObject,
-  bulletHitTestObject,
   environmentRuleHasCollision
 } from "../utils/index";
 import audioPath from '../gameaudio/battlemusickurenai.m4a';
 import { parseInitEnvDataToGameWorld } from "../utils/envParser";
-import { getBestDirection } from "../tank-ai/tankai";
 import Water from "../component/Water";
 import Grass from "../component/Grass";
 import Walls from "../component/Walls";
@@ -37,24 +34,24 @@ export default defineComponent({
     const {
       SteelBlocksArr: SteelIntialData,
       GrassBlocksArr: GrassInitialData,
-      InvunerableBuffsArr: InvunerableBuffConfigData,
-      WallsBlockArr: WallsInitData,
-      WaterBlockArr: WaterIntialData,
-      EnemyBasicTankArr: enemyTankConfig,
-      EnemyTankType2Arr: enemyType2Config,
-      Player: PlayerInitData
+      InvunerableBuffsArr: InvunerableBuffInitialData,
+      WallsBlockArr: WallsInitialData,
+      WaterBlockArr: WaterInitialData,
+      EnemyBasicTankArr: enemyInitialData,
+      EnemyTankType2Arr: enemyType2InitialData,
+      Player: PlayerInitialData
     } = parseInitEnvDataToGameWorld(setup.value);
 
-    const { enemyTanks } = useCreateEnemyTank(enemyTankConfig);
+    const { enemyTanks } = useCreateEnemyTank(enemyInitialData);
 
     const { enemyTanks: enemyTanksType2 } = useCreateEnemyTank(
-      enemyType2Config
+      enemyType2InitialData
     );
 
-    const WallsBlocks = useBackgrounds(WallsInitData);
+    const WallsBlocks = useBackgrounds(WallsInitialData);
     const SteelBlocks = useBackgrounds(SteelIntialData);
     const { tankInfo } = useCreateTank(
-      PlayerInitData,
+      PlayerInitialData,
       environmentRuleHasCollision,
       {
         SteelBlocks,
@@ -62,12 +59,12 @@ export default defineComponent({
       }
     );
 
-    const WaterBlocks = useBackgrounds(WaterIntialData);
+    const WaterBlocks = useBackgrounds(WaterInitialData);
 
     const GrassBlocks = useBackgrounds(GrassInitialData);
 
 
-    const InvulnerableBuffs = useInvunerableBuff(InvunerableBuffConfigData);
+    const InvulnerableBuffs = useInvunerableBuff(InvunerableBuffInitialData);
 
     // 我方子弹
     const { bullets, addBullet } = useCreateBullets();
@@ -203,459 +200,3 @@ export default defineComponent({
     ]);
   }
 });
-
-function useFighting(
-  bgMusic,
-  level,
-  enemyTanks,
-  enemyTanksTypes2,
-  bullets,
-  enemyBullets,
-  playerTankInfo,
-  emit,
-  environment
-) {
-  const handleTicker = () => {
-    const { SteelBlocks, WallsBlocks } = environment;
-    bullets.forEach(bulletInfo => {
-      switch (bulletInfo.direction) {
-        case "TOP":
-          bulletInfo.y--;
-          break;
-        case "DOWN":
-          bulletInfo.y++;
-          break;
-        case "LEFT":
-          bulletInfo.x--;
-          break;
-        case "RIGHT":
-          bulletInfo.x++;
-          break;
-      }
-    });
-
-    enemyBullets.forEach(bulletInfo => {
-      switch (bulletInfo.direction) {
-        case "TOP":
-          bulletInfo.y--;
-          break;
-        case "DOWN":
-          bulletInfo.y++;
-          break;
-        case "LEFT":
-          bulletInfo.x--;
-          break;
-        case "RIGHT":
-          bulletInfo.x++;
-          break;
-      }
-    });
-
-    enemyTanks.forEach(enemyInfo => {
-      if (hitTestObject(enemyInfo, playerTankInfo)) {
-        playerTankInfo.status = "DEAD"
-        setTimeout(function() {
-          bgMusic.stop();
-          emit("changePage", "EndPage");
-        }, 1000);
-      }
-    });
-
-    enemyTanksTypes2.forEach(enemyInfo => {
-      if (hitTestObject(enemyInfo, playerTankInfo)) {
-        playerTankInfo.status = "DEAD"
-        setTimeout(function() {
-          bgMusic.stop()
-          emit("changePage", "EndPage");
-        }, 1000);
-      }
-    });
-
-    if (enemyTanksTypes2.length === 0 && enemyTanks.length === 0) {
-      if (level === 1) {
-        bgMusic.stop()
-        emit("changePage", "CoverPage");
-        emit("changeLevel", 2);
-      } else if (level === 2) {
-        bgMusic.stop()
-        emit("changePage", "StartPage");
-        emit("changeLevel", 1);
-      }
-    }
-
-    enemyBullets.forEach((enemyInfo, bulletIndex) => {
-      if (hitTestObject(enemyInfo, playerTankInfo)) {
-        playerTankInfo.status = "DEAD"
-        enemyBullets.splice(bulletIndex, 1);
-        // 游戏结束
-        setTimeout(function() {
-          bgMusic.stop();
-          emit("changePage", "EndPage");
-        }, 1000);
-      }
-    });
-
-    bullets.forEach((bulletInfo, bulletIndex) => {
-      enemyBullets.forEach((enemyBulletInfo, enemyIndex) => {
-        if (bulletHitTestObject(bulletInfo, enemyBulletInfo)) {
-          bullets.splice(bulletIndex, 1);
-          enemyBullets.splice(enemyIndex, 1);
-        }
-      });
-    });
-
-    bullets.forEach((bulletInfo, bulletIndex) => {
-      SteelBlocks.forEach((SteelBlockInfo, enemyIndex) => {
-        if (bulletHitTestObject(bulletInfo, SteelBlockInfo)) {
-          bullets.splice(bulletIndex, 1);
-        }
-      });
-    });
-
-    bullets.forEach((bulletInfo, bulletIndex) => {
-      WallsBlocks.forEach((WallsBlockInfo, WallsBlocksIndex) => {
-        if (bulletHitTestObject(bulletInfo, WallsBlockInfo)) {
-          bullets.splice(bulletIndex, 1);
-          if (WallsBlockInfo.health <= 0) {
-            WallsBlocks.splice(WallsBlocksIndex, 1);
-          } else {
-            WallsBlockInfo.health = WallsBlockInfo.health - 50;
-          }
-        }
-      });
-    });
-
-    enemyBullets.forEach((bulletInfo, bulletIndex) => {
-      WallsBlocks.forEach((WallsBlockInfo, WallsBlocksIndex) => {
-        if (bulletHitTestObject(bulletInfo, WallsBlockInfo)) {
-          enemyBullets.splice(bulletIndex, 1);
-          if (WallsBlockInfo.health === 0) {
-            WallsBlocks.splice(WallsBlocksIndex, 1);
-          } else {
-            WallsBlockInfo.health = WallsBlockInfo.health - 25;
-          }
-        }
-      });
-    });
-
-    enemyBullets.forEach((bulletInfo, bulletIndex) => {
-      SteelBlocks.forEach((SteelBlockInfo, enemyIndex) => {
-        if (bulletHitTestObject(bulletInfo, SteelBlockInfo)) {
-          enemyBullets.splice(bulletIndex, 1);
-        }
-      });
-    });
-
-    bullets.forEach((bulletInfo, bulletIndex) => {
-      enemyTanks.forEach((enemyInfo, enemyIndex) => {
-        if (
-          hitTestObject(bulletInfo, enemyInfo) &&
-          enemyInfo.status === "ALIVE"
-        ) {
-          bullets.splice(bulletIndex, 1);
-          if (enemyInfo.health === 0) {
-            enemyInfo.status = "DEAD";
-            setTimeout(function() {
-              enemyTanks.splice(enemyIndex, 1);
-            }, 1000);
-          } else {
-            enemyInfo.health = enemyInfo.health - 25;
-          }
-        }
-      });
-    });
-
-    bullets.forEach((bulletInfo, bulletIndex) => {
-      enemyTanksTypes2.forEach((enemyInfo, enemyIndex) => {
-        if (
-          hitTestObject(bulletInfo, enemyInfo) &&
-          enemyInfo.status === "ALIVE"
-        ) {
-          bullets.splice(bulletIndex, 1);
-          // 能挨两炮
-          if (enemyInfo.health === 0) {
-            enemyInfo.status = "DEAD";
-            setTimeout(function() {
-              enemyTanksTypes2.splice(enemyIndex, 1);
-            }, 1000);
-          } else {
-            enemyInfo.health = enemyInfo.health - 25;
-          }
-        }
-      });
-    });
-  };
-
-  onMounted(() => {
-    game.ticker.add(handleTicker);
-  });
-
-  onUnmounted(() => {
-    game.ticker.remove(handleTicker);
-  });
-}
-
-function useCreateBullets() {
-  const bullets = reactive([]);
-
-  const addBullet = info => {
-    bullets.push({ ...info, width: 2, height: 2 });
-  };
-
-  return {
-    bullets,
-    addBullet
-  };
-}
-
-function useCreateEnemyTank(enemyInitData) {
-  const enemyTanks = reactive(enemyInitData);
-  return {
-    enemyTanks
-  };
-}
-
-function useEnvironmentInteraction(
-  playerTankInfo,
-  environmentRuleHasCollision,
-  enemyTanks,
-  enemyTanksType2,
-  environment
-) {
-  let timeIntervalReturnedValue;
-  const handleTicker = () => {
-    enemyTanksType2.forEach(tankInfo => {
-      if (tankInfo.status === "ALIVE") {
-        const speed = 15;
-        const direction = getBestDirection(tankInfo, playerTankInfo);
-        switch (direction) {
-          case "TOP":
-            tankInfo.direction = "TOP";
-            tankInfo.y -= speed;
-            if (environmentRuleHasCollision({ tankInfo, environment })) {
-              tankInfo.y += speed;
-            }
-            break;
-          case "DOWN":
-            tankInfo.direction = "DOWN";
-            tankInfo.y += speed;
-            if (environmentRuleHasCollision({ tankInfo, environment })) {
-              tankInfo.y -= speed;
-            }
-            break;
-          case "LEFT":
-            tankInfo.direction = "LEFT";
-            tankInfo.x -= speed;
-            if (environmentRuleHasCollision({ tankInfo, environment })) {
-              tankInfo.x += speed;
-            }
-            break;
-          case "RIGHT":
-            tankInfo.direction = "RIGHT";
-            tankInfo.x += speed;
-            if (environmentRuleHasCollision({ tankInfo, environment })) {
-              tankInfo.x -= speed;
-            }
-            break;
-        }
-        const randonNumber = Math.random();
-        if (!environmentRuleHasCollision({ tankInfo, environment })) {
-          if (
-            randonNumber >= 0 &&
-            randonNumber <= 0.25 &&
-            tankInfo.direction !== "LEFT" &&
-            tankInfo.direction !== "RIGHT"
-          ) {
-            tankInfo.direction = "TOP";
-            tankInfo.y -= speed;
-            if (environmentRuleHasCollision({ tankInfo, environment })) {
-              tankInfo.y += speed;
-            }
-          } else if (
-            randonNumber >= 0.25 &&
-            randonNumber <= 0.5 &&
-            tankInfo.direction !== "LEFT" &&
-            tankInfo.direction !== "RIGHT"
-          ) {
-            tankInfo.direction = "DOWN";
-            tankInfo.y += speed;
-            if (environmentRuleHasCollision({ tankInfo, environment })) {
-              tankInfo.y -= speed;
-            }
-          } else if (
-            randonNumber >= 0.5 &&
-            randonNumber <= 0.75 &&
-            tankInfo.direction !== "TOP" &&
-            tankInfo.direction !== "DOWN"
-          ) {
-            tankInfo.direction = "LEFT";
-            tankInfo.x -= speed;
-            if (environmentRuleHasCollision({ tankInfo, environment })) {
-              tankInfo.x += speed;
-            }
-          } else if (
-            tankInfo.direction !== "TOP" &&
-            tankInfo.direction !== "DOWN"
-          ) {
-            tankInfo.direction = "RIGHT";
-            tankInfo.x += speed;
-            if (environmentRuleHasCollision({ tankInfo, environment })) {
-              tankInfo.x -= speed;
-            }
-          }
-        }
-      }
-    });
-
-    enemyTanks.forEach(tankInfo => {
-      if (tankInfo.status === "ALIVE") {
-        const speed = 7.5;
-        const direction = getBestDirection(tankInfo, playerTankInfo);
-        switch (direction) {
-          case "TOP":
-            tankInfo.direction = "TOP";
-            tankInfo.y -= speed;
-            if (environmentRuleHasCollision({ tankInfo, environment })) {
-              tankInfo.y += speed;
-            }
-            break;
-          case "DOWN":
-            tankInfo.direction = "DOWN";
-            tankInfo.y += speed;
-            if (environmentRuleHasCollision({ tankInfo, environment })) {
-              tankInfo.y -= speed;
-            }
-            break;
-          case "LEFT":
-            tankInfo.direction = "LEFT";
-            tankInfo.x -= speed;
-            if (environmentRuleHasCollision({ tankInfo, environment })) {
-              tankInfo.x += speed;
-            }
-            break;
-          case "RIGHT":
-            tankInfo.direction = "RIGHT";
-            tankInfo.x += speed;
-            if (environmentRuleHasCollision({ tankInfo, environment })) {
-              tankInfo.x -= speed;
-            }
-            break;
-        }
-        const randonNumber = Math.random();
-        if (!environmentRuleHasCollision({ tankInfo, environment })) {
-          if (
-            randonNumber >= 0 &&
-            randonNumber <= 0.25 &&
-            tankInfo.direction !== "LEFT" &&
-            tankInfo.direction !== "RIGHT"
-          ) {
-            tankInfo.direction = "TOP";
-            tankInfo.y -= speed;
-            if (environmentRuleHasCollision({ tankInfo, environment })) {
-              tankInfo.y += speed;
-            }
-          } else if (
-            randonNumber >= 0.25 &&
-            randonNumber <= 0.5 &&
-            tankInfo.direction !== "LEFT" &&
-            tankInfo.direction !== "RIGHT"
-          ) {
-            tankInfo.direction = "DOWN";
-            tankInfo.y += speed;
-            if (environmentRuleHasCollision({ tankInfo, environment })) {
-              tankInfo.y -= speed;
-            }
-          } else if (
-            randonNumber >= 0.5 &&
-            randonNumber <= 0.75 &&
-            tankInfo.direction !== "TOP" &&
-            tankInfo.direction !== "DOWN"
-          ) {
-            tankInfo.direction = "LEFT";
-            tankInfo.x -= speed;
-            if (environmentRuleHasCollision({ tankInfo, environment })) {
-              tankInfo.x += speed;
-            }
-          } else if (
-            tankInfo.direction !== "TOP" &&
-            tankInfo.direction !== "DOWN"
-          ) {
-            tankInfo.direction = "RIGHT";
-            tankInfo.x += speed;
-            if (environmentRuleHasCollision({ tankInfo, environment })) {
-              tankInfo.x -= speed;
-            }
-          }
-        }
-      }
-    });
-  };
-
-  onMounted(() => {
-    timeIntervalReturnedValue = setInterval(handleTicker, 1000);
-  });
-
-  onUnmounted(() => {
-    clearInterval(timeIntervalReturnedValue);
-  });
-}
-
-
-function useInvunerableBuff(buffInitData) {
-
-  const InvulnerableBuffs = reactive(buffInitData);
-
-  return InvulnerableBuffs;
-}
-
-
-function useBackgrounds(bgInitData) {
-
-  const backgroundBlocks = reactive(bgInitData);
-
-  return backgroundBlocks;
-}
-
-function useCreateTank(
-  playerInitData,
-  environmentRuleHasCollision,
-  environment
-) {
-  const tankInfo = reactive(playerInitData);
-  const speed = 5;
-  window.addEventListener("keydown", e => {
-    if (tankInfo.status === "ALIVE" && !environmentRuleHasCollision({ tankInfo, environment })) {
-      switch (e.code) {
-        case "ArrowUp":
-          tankInfo.direction = "TOP";
-          tankInfo.y -= speed;
-          if (environmentRuleHasCollision({ tankInfo, environment })) {
-            tankInfo.y += speed;
-          }
-          break;
-        case "ArrowDown":
-          tankInfo.direction = "DOWN";
-          tankInfo.y += speed;
-          if (environmentRuleHasCollision({ tankInfo, environment })) {
-            tankInfo.y -= speed;
-          }
-          break;
-        case "ArrowLeft":
-          tankInfo.direction = "LEFT";
-          tankInfo.x -= speed;
-          if (environmentRuleHasCollision({ tankInfo, environment })) {
-            tankInfo.x += speed;
-          }
-          break;
-        case "ArrowRight":
-          tankInfo.direction = "RIGHT";
-          tankInfo.x += speed;
-          if (environmentRuleHasCollision({ tankInfo, environment })) {
-            tankInfo.x -= speed;
-          }
-          break;
-      }
-    }
-  });
-  return { tankInfo };
-}
