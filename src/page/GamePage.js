@@ -152,7 +152,10 @@ export default defineComponent({
 
     const createBullets = () => {
       return ctx.bullets.map(info => {
-        return h(Bullet, { x: info.x, y: info.y, direction: info.direction });
+        return h(Bullet, { 
+          x: info.x, 
+          y: info.y, 
+          direction: info.direction });
       });
     };
 

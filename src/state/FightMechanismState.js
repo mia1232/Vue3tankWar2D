@@ -1,5 +1,5 @@
 import { onMounted, onUnmounted } from "@vue/runtime-core";
-import { hitTestObject, bulletHitTestObject } from "../utils/index";
+import { bulletHitTestObject } from "../utils/index";
 import { game } from "../Game";
 export function useFighting(
   bgMusic,
@@ -49,7 +49,7 @@ export function useFighting(
     });
 
     enemyTanks.forEach(enemyInfo => {
-      if (hitTestObject(enemyInfo, playerTankInfo)) {
+      if (bulletHitTestObject(enemyInfo, playerTankInfo)) {
         playerTankInfo.status = "DEAD";
         setTimeout(function() {
           bgMusic.stop();
@@ -59,7 +59,7 @@ export function useFighting(
     });
 
     enemyTanksTypes2.forEach(enemyInfo => {
-      if (hitTestObject(enemyInfo, playerTankInfo)) {
+      if (bulletHitTestObject(enemyInfo, playerTankInfo)) {
         playerTankInfo.status = "DEAD";
         setTimeout(function() {
           bgMusic.stop();
@@ -81,7 +81,7 @@ export function useFighting(
     }
 
     enemyBullets.forEach((enemyInfo, bulletIndex) => {
-      if (hitTestObject(enemyInfo, playerTankInfo)) {
+      if (bulletHitTestObject(enemyInfo, playerTankInfo)) {
         playerTankInfo.status = "DEAD";
         enemyBullets.splice(bulletIndex, 1);
         // 游戏结束
@@ -102,7 +102,7 @@ export function useFighting(
     });
 
     bullets.forEach((bulletInfo, bulletIndex) => {
-      SteelBlocks.forEach((SteelBlockInfo, enemyIndex) => {
+      SteelBlocks.forEach((SteelBlockInfo) => {
         if (bulletHitTestObject(bulletInfo, SteelBlockInfo)) {
           bullets.splice(bulletIndex, 1);
         }
@@ -136,7 +136,7 @@ export function useFighting(
     });
 
     enemyBullets.forEach((bulletInfo, bulletIndex) => {
-      SteelBlocks.forEach((SteelBlockInfo, enemyIndex) => {
+      SteelBlocks.forEach((SteelBlockInfo) => {
         if (bulletHitTestObject(bulletInfo, SteelBlockInfo)) {
           enemyBullets.splice(bulletIndex, 1);
         }
@@ -146,7 +146,7 @@ export function useFighting(
     bullets.forEach((bulletInfo, bulletIndex) => {
       enemyTanks.forEach((enemyInfo, enemyIndex) => {
         if (
-          hitTestObject(bulletInfo, enemyInfo) &&
+          bulletHitTestObject(bulletInfo, enemyInfo) &&
           enemyInfo.status === "ALIVE"
         ) {
           bullets.splice(bulletIndex, 1);
@@ -165,7 +165,7 @@ export function useFighting(
     bullets.forEach((bulletInfo, bulletIndex) => {
       enemyTanksTypes2.forEach((enemyInfo, enemyIndex) => {
         if (
-          hitTestObject(bulletInfo, enemyInfo) &&
+          bulletHitTestObject(bulletInfo, enemyInfo) &&
           enemyInfo.status === "ALIVE"
         ) {
           bullets.splice(bulletIndex, 1);

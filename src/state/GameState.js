@@ -16,7 +16,7 @@ export function useCreateBullets() {
   const bullets = reactive([]);
 
   const addBullet = info => {
-    bullets.push({ ...info, width: 2, height: 2 });
+    bullets.push({ ...info, width: 17, height: 17 });
   };
 
   return {

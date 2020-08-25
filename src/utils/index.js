@@ -1,5 +1,5 @@
 // 碰撞检测的算法
-export const hitTestObject = (objA, objB) => {
+export const envTestObject = (objA, objB) => {
   // 找出所有没有碰撞的结果
   // 取反
   // 碰撞上的结果
@@ -27,11 +27,12 @@ export const environmentRuleHasCollision = ({ environment, tankInfo }) => {
   const { SteelBlocks, WallsBlocks } = environment;
   if(tankInfo.x < 0 || tankInfo.x + 60 > 60 * 14 || tankInfo.y < 0 || tankInfo.y + 60 > 60 * 12 )
     return true;
-  if (SteelBlocks) {
+  //使坦克无法驶出地图边界
+  if (SteelBlocks || WallsBlocks) {
     return (
-      SteelBlocks.filter(steelBlock => hitTestObject(steelBlock, tankInfo))
+      SteelBlocks.filter(steelBlock => envTestObject(steelBlock, tankInfo))
         .length > 0 || 
-      WallsBlocks.filter(WallsBlock => hitTestObject(WallsBlock, tankInfo))
+      WallsBlocks.filter(wallsBlock => envTestObject(wallsBlock, tankInfo))
         .length > 0 
     );
   } else {
