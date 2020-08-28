@@ -11,7 +11,7 @@ import enemyTankImgD from "../../assets/enemy1D.gif";
 import enemyTankImgL from "../../assets/enemy1L.gif";
 import enemyTankImgR from "../../assets/enemy1R.gif";
 import enemyTankImgU from "../../assets/enemy1U.gif";
-import { ENEMY_TANK_TYPE1_FIRE_INTERVAL } from "../gameconfig/game-config";
+import  ENEMY_TANK_TYPE1_FIRE_INTERVAL from "../gameconfig/game-config";
 import Blast from "../../assets/blast7.gif";
 import { firePointTransform } from "../utils/index";
 
