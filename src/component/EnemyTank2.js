@@ -14,7 +14,7 @@ import {
   import enemyTankImgU from "../../assets/enemy2U.gif";
   import Blast from "../../assets/blast7.gif";
   import { firePointTransform } from "../utils/index";
-  import ENEMY_TANK_TYPE2_FIRE_INTERVAL from "../gameconfig/game-config";
+  import { ENEMY_TANK_TYPE2_FIRE_INTERVAL } from "../gameconfig/game-config";
   
   export default defineComponent({
     props: ["x", "y", "direction", "status"],

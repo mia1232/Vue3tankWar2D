@@ -9,7 +9,7 @@ import TankImgD from "../../assets/p1tankD.gif";
 import TankImgL from "../../assets/p1tankL.gif";
 import TankImgR from "../../assets/p1tankR.gif";
 import TankImgU from "../../assets/p1tankU.gif";
-import PLAYER_FIRE_INTERVAL from "../gameconfig/game-config";
+import { PLAYER_FIRE_INTERVAL} from "../gameconfig/game-config";
   
 import Blast from "../../assets/blast7.gif";
 import { firePointTransform, throttle } from "../utils/index";
