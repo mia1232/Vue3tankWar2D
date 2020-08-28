@@ -14,13 +14,12 @@ import {
   import enemyTankImgU from "../../assets/enemy2U.gif";
   import Blast from "../../assets/blast7.gif";
   import { firePointTransform } from "../utils/index";
+  import ENEMY_TANK_TYPE2_FIRE_INTERVAL from "../gameconfig/game-config";
   
   export default defineComponent({
     props: ["x", "y", "direction", "status"],
 
     setup(props, { emit }) {
-            
-      const tankFireInterval = 2500;
       const { x, y, direction, status } = toRefs(props);
       const TankImg = computed(() => {
         if(status.value === 'DEAD') {
@@ -45,7 +44,7 @@ import {
       let timeIntervalReturnedValue;
       onMounted(() => {
         //每2.5秒发射一颗子弹
-        timeIntervalReturnedValue = setInterval(enemyFire, tankFireInterval);
+        timeIntervalReturnedValue = setInterval(enemyFire, ENEMY_TANK_TYPE2_FIRE_INTERVAL );
       });
     
       onUnmounted(() => {

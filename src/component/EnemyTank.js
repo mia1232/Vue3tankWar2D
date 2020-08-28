@@ -6,12 +6,12 @@ import {
   computed,
   onMounted,
   onUnmounted
-
 } from "@vue/runtime-core";
 import enemyTankImgD from "../../assets/enemy1D.gif";
 import enemyTankImgL from "../../assets/enemy1L.gif";
 import enemyTankImgR from "../../assets/enemy1R.gif";
 import enemyTankImgU from "../../assets/enemy1U.gif";
+import ENEMY_TANK_TYPE1_FIRE_INTERVAL from "../gameconfig/game-config";
 import Blast from "../../assets/blast7.gif";
 import { firePointTransform } from "../utils/index";
 
@@ -20,7 +20,6 @@ export default defineComponent({
 
 
   setup(props, { emit }) {
-    const tankFireInterval = 4000; 
     const { x, y, direction, status } = toRefs(props);   
     const TankImg = computed(() => {
       if(status.value === 'DEAD') {
@@ -46,7 +45,7 @@ export default defineComponent({
     let timeIntervalReturnedValue;
     onMounted(() => {
       //每四秒发射一颗子弹
-      timeIntervalReturnedValue = setInterval(enemyFire,tankFireInterval);
+      timeIntervalReturnedValue = setInterval(enemyFire, ENEMY_TANK_TYPE1_FIRE_INTERVAL);
     });
   
     onUnmounted(() => {
