@@ -34,7 +34,7 @@ export function useCreateTank(
   const speed = 5;
   window.addEventListener("keydown", e => {
     if (
-      tankInfo.status === "ALIVE" &&
+      (tankInfo.status === "ALIVE" || tankInfo.status === "INVINCIBLE") &&
       !environmentRuleHasCollision({ tankInfo, environment })
     ) {
       switch (e.code) {

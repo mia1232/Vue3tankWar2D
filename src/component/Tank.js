@@ -9,6 +9,10 @@ import TankImgD from "../../assets/p1tankD.gif";
 import TankImgL from "../../assets/p1tankL.gif";
 import TankImgR from "../../assets/p1tankR.gif";
 import TankImgU from "../../assets/p1tankU.gif";
+import BuffedTankImgD from "../../assets/superTankD.gif";
+import BuffedTankImgL from "../../assets/superTankL.gif";
+import BuffedTankImgR from "../../assets/superTankR.gif";
+import BuffedTankImgU from "../../assets/superTankU.gif";
 import { PLAYER_FIRE_INTERVAL} from "../gameconfig/game-config";
   
 import Blast from "../../assets/blast7.gif";
@@ -25,16 +29,27 @@ export default defineComponent({
       if(status.value === 'DEAD') {
         // 坦克死亡 展示 爆炸图像
         return Blast;
+      } else if (status.value !== 'INVINCIBLE') {
+        if (direction.value === "TOP") {
+          return TankImgU;
+        } else if (direction.value === "LEFT") {
+          return TankImgL;
+        } else if (direction.value === "RIGHT") {
+          return TankImgR;
+        } else if (direction.value === "DOWN") {
+          return TankImgD;
+        }  
+      } else {
+        if (direction.value === "TOP") {
+          return BuffedTankImgU;
+        } else if (direction.value === "LEFT") {
+          return BuffedTankImgL;
+        } else if (direction.value === "RIGHT") {
+          return BuffedTankImgR;
+        } else if (direction.value === "DOWN") {
+          return BuffedTankImgD;
+        }  
       }
-      if (direction.value === "TOP") {
-        return TankImgU;
-      } else if (direction.value === "LEFT") {
-        return TankImgL;
-      } else if (direction.value === "RIGHT") {
-        return TankImgR;
-      } else if (direction.value === "DOWN") {
-        return TankImgD;
-      } 
     });
 
     function tankFireHandler(e) {

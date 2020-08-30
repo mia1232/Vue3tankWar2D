@@ -10,7 +10,8 @@ export function useFighting(
   enemyBullets,
   playerTankInfo,
   emit,
-  environment
+  environment,
+  InvulnerableBuffs
 ) {
   const handleTicker = () => {
     const { SteelBlocks, WallsBlocks } = environment;
@@ -49,7 +50,7 @@ export function useFighting(
     });
 
     enemyTanks.forEach(enemyInfo => {
-      if (bulletHitTestObject(enemyInfo, playerTankInfo)) {
+      if (playerTankInfo.status !== "INVINCIBLE" && bulletHitTestObject(enemyInfo, playerTankInfo)) {
         playerTankInfo.status = "DEAD";
         setTimeout(function() {
           bgMusic.stop();
@@ -59,12 +60,22 @@ export function useFighting(
     });
 
     enemyTanksTypes2.forEach(enemyInfo => {
-      if (bulletHitTestObject(enemyInfo, playerTankInfo)) {
+      if (playerTankInfo.status !== "INVINCIBLE" && bulletHitTestObject(enemyInfo, playerTankInfo)) {
         playerTankInfo.status = "DEAD";
         setTimeout(function() {
           bgMusic.stop();
           emit("changePage", "EndPage");
         }, 1000);
+      }
+    });
+
+    InvulnerableBuffs.forEach((buff, buffIndex) => {
+      if (bulletHitTestObject(buff, playerTankInfo)) {
+        InvulnerableBuffs.splice(buffIndex, 1);
+        playerTankInfo.status = "INVINCIBLE";
+        setTimeout(function() {
+          playerTankInfo.status = "ALIVE";
+        }, 20000);
       }
     });
 
@@ -82,13 +93,15 @@ export function useFighting(
 
     enemyBullets.forEach((enemyInfo, bulletIndex) => {
       if (bulletHitTestObject(enemyInfo, playerTankInfo)) {
-        playerTankInfo.status = "DEAD";
         enemyBullets.splice(bulletIndex, 1);
+        if(playerTankInfo.status!== "INVINCIBLE") {
+        playerTankInfo.status = "DEAD";
         // 游戏结束
         setTimeout(function() {
           bgMusic.stop();
           emit("changePage", "EndPage");
         }, 1000);
+        }
       }
     });
 

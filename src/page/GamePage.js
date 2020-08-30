@@ -84,7 +84,8 @@ export default defineComponent({
       {
         SteelBlocks,
         WallsBlocks
-      }
+      },
+      InvulnerableBuffs
     );
     useEnvironmentInteraction(
       tankInfo,
