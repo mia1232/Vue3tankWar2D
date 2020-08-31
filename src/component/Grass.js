@@ -1,4 +1,3 @@
-//敌方飞机
 import {
     h,
     defineComponent,

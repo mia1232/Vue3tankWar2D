@@ -1,4 +1,4 @@
-//我方子弹
+//敌方子弹
 import {
   h,
   defineComponent,

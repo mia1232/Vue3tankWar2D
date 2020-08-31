@@ -1,4 +1,3 @@
-// 飞机
 import {
   h,
   defineComponent,
