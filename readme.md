@@ -1,7 +1,7 @@
 
 ### 坦克大战
 
-#### 使用 Vue3 和 Canvas 
+#### 技术栈 Vue3 Canvas 
 
 ***
 
