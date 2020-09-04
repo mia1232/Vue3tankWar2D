@@ -86,7 +86,7 @@ export function useFighting(
         emit("changeLevel", 2);
       } else if (level === 2) {
         bgMusic.stop();
-        emit("changePage", "StartPage");
+        emit("changePage", "CoverPage");
         emit("changeLevel", 3);
       }
     }
