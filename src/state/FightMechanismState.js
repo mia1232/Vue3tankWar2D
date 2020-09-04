@@ -87,7 +87,7 @@ export function useFighting(
       } else if (level === 2) {
         bgMusic.stop();
         emit("changePage", "StartPage");
-        emit("changeLevel", 1);
+        emit("changeLevel", 3);
       }
     }
 

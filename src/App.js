@@ -5,7 +5,7 @@ import StartPage from "./page/StartPage";
 import GamePage from "./page/GamePage";
 import EndPage from "./page/EndPage";
 import Coverpage from "./page/levelProgressionPage";
-import { GameLevel1Setup, GameLevel2Setup } from "./environment-config/envConfig";
+import { GameLevel1Setup, GameLevel2Setup, GameLevel3Setup } from "./environment-config/envConfig";
 
 
 export default defineComponent({
@@ -29,6 +29,8 @@ export default defineComponent({
         return GameLevel1Setup;
       } else if (gameLevel.value === 2) {  
         return GameLevel2Setup;
+      }else if (gameLevel.value === 3) {  
+        return GameLevel3Setup;
       }
     });
 
