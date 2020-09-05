@@ -59,15 +59,15 @@ export function useFighting(
       }
     });
 
-    enemyTanksTypes2.forEach(enemyInfo => {
-      if (playerTankInfo.status !== "INVINCIBLE" && bulletHitTestObject(enemyInfo, playerTankInfo)) {
-        playerTankInfo.status = "DEAD";
-        setTimeout(function() {
-          bgMusic.stop();
-          emit("changePage", "EndPage");
-        }, 1000);
-      }
-    });
+    // enemyTanksTypes2.forEach(enemyInfo => {
+    //   if (playerTankInfo.status !== "INVINCIBLE" && bulletHitTestObject(enemyInfo, playerTankInfo)) {
+    //     playerTankInfo.status = "DEAD";
+    //     setTimeout(function() {
+    //       bgMusic.stop();
+    //       emit("changePage", "EndPage");
+    //     }, 1000);
+    //   }
+    // });
 
     InvulnerableBuffs.forEach((buff, buffIndex) => {
       if (bulletHitTestObject(buff, playerTankInfo)) {
