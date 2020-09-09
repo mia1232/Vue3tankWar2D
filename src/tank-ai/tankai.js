@@ -1,6 +1,6 @@
-export function getBestDirection(currentTankInfo, targetInfo){
+//根据敌我相对位置 让地方坦克向玩家的位置挪动
 
-    //根据敌我相对位置 让地方坦克向玩家的位置挪动
+export function getBestDirection(currentTankInfo, targetInfo){
     const dirDistanceMapping = {};
     dirDistanceMapping["TOP"] = getDistance(targetInfo, {...currentTankInfo, y: currentTankInfo.y  - 15});
     dirDistanceMapping["DOWN"] = getDistance(targetInfo, {...currentTankInfo, y: currentTankInfo.y + 15});

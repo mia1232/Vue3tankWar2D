@@ -3,7 +3,6 @@ import {
   defineComponent,
   toRefs
 } from "@vue/runtime-core";
-
 import { useFighting } from "../state/FightMechanismState"; 
 import { useEnvironmentInteraction, useBackgrounds } from "../state/EnvState";
 import { useCreateTank, useCreateEnemyTank, useCreateBullets, useInvunerableBuff }from "../state/GameState";
@@ -15,9 +14,8 @@ import Bullet from "../component/Bullet";
 import EnemyBullet from "../component/EnemyBullet";
 import InvunerableBuff from "../component/InvulnerableBuff";
 import { backgroundAudio } from "../gameaudio/audioUtil";
-import {
-  environmentRuleHasCollision
-} from "../utils/index";
+import { enemyTankGeneratorStart } from "../tank-ai/tank-generator"; 
+import { environmentRuleHasCollision } from "../utils/index";
 import audioPath from '../gameaudio/battlemusickurenai.m4a';
 import { parseInitEnvDataToGameWorld } from "../utils/envParser";
 import Water from "../component/Water";
@@ -25,11 +23,11 @@ import Grass from "../component/Grass";
 import Walls from "../component/Walls";
 
 export default defineComponent({
-  props: ["level", "setup"],
+  props: ["level", "setup", "enemySpawningSetup"],
   setup(props, { emit }) {
     const bgMusic = new backgroundAudio(audioPath);
     bgMusic.play();
-    const { level, setup } = toRefs(props);
+    const { level, setup, enemySpawningSetup } = toRefs(props);
 
     const {
       SteelBlocksArr: SteelIntialData,
@@ -72,6 +70,13 @@ export default defineComponent({
       bullets: enemyBullets,
       addBullet: addEnemyBullet
     } = useCreateBullets();
+
+
+    enemyTankGeneratorStart({
+      SteelBlocks,
+      WallsBlocks
+    }, enemyTanks, enemyTanksType2, enemySpawningSetup.value);
+    
     useFighting(
       bgMusic,
       level.value,

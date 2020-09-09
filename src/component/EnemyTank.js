@@ -11,17 +11,23 @@ import enemyTankImgD from "../../assets/enemy1D.gif";
 import enemyTankImgL from "../../assets/enemy1L.gif";
 import enemyTankImgR from "../../assets/enemy1R.gif";
 import enemyTankImgU from "../../assets/enemy1U.gif";
+import enemyTankSpawningStage1 from "../../assets/born1.gif";
+import enemyTankSpawningStage2 from "../../assets/born3.gif";
 import  { ENEMY_TANK_TYPE1_FIRE_INTERVAL } from "../gameconfig/game-config";
 import Blast from "../../assets/blast7.gif";
 import { firePointTransform } from "../utils/index";
 
 export default defineComponent({
   props: ["x", "y", "direction", "status"],
-
-
   setup(props, { emit }) {
     const { x, y, direction, status } = toRefs(props);   
     const TankImg = computed(() => {
+      if(status.value === 'SPAWNINGSTAGE1') {
+        return enemyTankSpawningStage1;
+      }
+      if(status.value === 'SPAWNINGSTAGE2') {
+        return enemyTankSpawningStage2;
+      }
       if(status.value === 'DEAD') {
         // 坦克死亡 展示 爆炸图像
         return Blast;

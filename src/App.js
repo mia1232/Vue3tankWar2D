@@ -5,7 +5,7 @@ import StartPage from "./page/StartPage";
 import GamePage from "./page/GamePage";
 import EndPage from "./page/EndPage";
 import Coverpage from "./page/levelProgressionPage";
-import { GameLevel1Setup, GameLevel2Setup, GameLevel3Setup } from "./environment-config/envConfig";
+import { GameLevel1Setup, GameLevel2Setup, GameLevel3Setup, GameLevel1EnemiesTankQueue, GameLevel2EnemiesTankQueue, GameLevel3EnemiesTankQueue } from "./environment-config/envConfig";
 
 
 export default defineComponent({
@@ -34,9 +34,20 @@ export default defineComponent({
       }
     });
 
+    const currentEnemySpawningSetup = computed(() => {
+      if (gameLevel.value === 1) {
+        return GameLevel1EnemiesTankQueue;
+      } else if (gameLevel.value === 2) {  
+        return GameLevel2EnemiesTankQueue;
+      }else if (gameLevel.value === 3) {  
+        return GameLevel3EnemiesTankQueue;
+      }
+    });
+
     return {
       currentPage,
       currentPageName,
+      currentEnemySpawningSetup,
       currentGameSetup,
       gameLevel
     };
@@ -46,6 +57,7 @@ export default defineComponent({
     return h("Container", [
       h(ctx.currentPage, { 
         setup: ctx.currentGameSetup,
+        enemySpawningSetup: ctx.currentEnemySpawningSetup,
         level: ctx.gameLevel,
         onChangePage(page) {
           ctx.currentPageName = page;

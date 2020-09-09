@@ -12,6 +12,8 @@ import {
   import enemyTankImgL from "../../assets/enemy2L.gif";
   import enemyTankImgR from "../../assets/enemy2R.gif";
   import enemyTankImgU from "../../assets/enemy2U.gif";
+  import enemyTankSpawningStage1 from "../../assets/born1.gif";
+  import enemyTankSpawningStage2 from "../../assets/born3.gif";
   import Blast from "../../assets/blast7.gif";
   import { firePointTransform } from "../utils/index";
   import { ENEMY_TANK_TYPE2_FIRE_INTERVAL } from "../gameconfig/game-config";
@@ -22,6 +24,12 @@ import {
     setup(props, { emit }) {
       const { x, y, direction, status } = toRefs(props);
       const TankImg = computed(() => {
+        if(status.value === 'SPAWNINGSTAGE1') {
+          return enemyTankSpawningStage1;
+        }
+        if(status.value === 'SPAWNINGSTAGE2') {
+          return enemyTankSpawningStage2;
+        }
         if(status.value === 'DEAD') {
           return Blast;
         }
