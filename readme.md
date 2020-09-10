@@ -17,10 +17,13 @@ npm install && npm run serve
 
 
 
+<<<<<<< HEAD
 
 ![Image text](https://raw.githubusercontent.com/mia1232/Vue3tankWar2D/master/assets/gamecover.jpeg)   
 
 
+=======
+>>>>>>> 43db462fc44df7ced0a47c822cda7c561898b0ed
 ![Image text](https://raw.githubusercontent.com/mia1232/Vue3tankWar2D/master/assets/screenshot.jpeg)   
 
 
