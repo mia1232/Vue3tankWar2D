@@ -2,12 +2,6 @@
 // 1 represents Grass 2 represents SteelBlock 3 represents WallsBlock 4 Represents Water 5 represents enemy
 // 8 represents invincible buff 
 
-
-
-
-
-
-
 export const GameLevel1EnemiesTankQueue = [{
     x: 3,
     y: 4,
@@ -22,6 +16,16 @@ export const GameLevel1EnemiesTankQueue = [{
     x: 7,
     y: 3,
     type: 2,
+    spawnTime: 7
+},{
+    x: 3,
+    y: 4,
+    type: 1,
+    spawnTime: 7
+},{
+    x: 3,
+    y: 6,
+    type: 1,
     spawnTime: 7
 }];
 
@@ -61,7 +65,7 @@ export const GameLevel1Setup = [[
 ],[
     0,3,3,0,3,3,0,3,3,0,3,3,3,0
 ],[
-    0,3,0,0,0,0,0,0,0,8,0,0,0,0
+    0,3,0,7,0,0,0,0,0,8,0,0,0,0
 ],[ 
     0,3,3,3,3,0,0,3,3,3,3,3,3,0
 ],[ 
