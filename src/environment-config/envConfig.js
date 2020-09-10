@@ -19,15 +19,10 @@ export const GameLevel1EnemiesTankQueue = [{
     type: 2,
     spawnTime: 7
 },{
-    x: 6,
-    y: 8,
-    type: 1,
-    spawnTime: 11
-},{
-    x: 11,
-    y: 12,
-    type: 1,
-    spawnTime: 20
+    x: 7,
+    y: 3,
+    type: 2,
+    spawnTime: 7
 }];
 
 
